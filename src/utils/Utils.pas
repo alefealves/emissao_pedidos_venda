@@ -7,33 +7,36 @@ uses
   System.IniFiles,
   Forms,
   Windows,
-  FireDAC.Comp.Client,
+  //FireDAC.Comp.Client,
+  IBX.IBDatabase,
+  IBX.IBQuery,
   View.Principal;
 
 type
   TUtils = class
   private
   public
-    class procedure CreateQuery(var Query: TFDQuery);
-    class procedure DestroyQuery(var Query: TFDQuery);
-    class procedure Mensagem(Mensagem: String);
+    class procedure CreateQuery(var Query: TIBQuery);
+    class procedure DestroyQuery(var Query: TIBQuery);
     class function StringInCurrency(Txt: String): Currency;
-    class procedure SetConnection(var Connection: TFDConnection; out bancoConectado: String);
+    class procedure SetConnection(var Connection: TIBDatabase; out bancoConectado: String);
     class function CheckFileDatabase: Boolean;
     class function CheckConfig: Boolean;
     class function ReadConfig(key: String): String;
     class procedure GravarConfig(key, value: string);
+    class procedure Mensagem(Mensagem: String);
   end;
 
 implementation
 
 { TUtils }
 
-class procedure TUtils.CreateQuery(var Query: TFDQuery);
+class procedure TUtils.CreateQuery(var Query: TIBQuery);
 begin
   try
-    Query := TFDQuery.Create(ViewPrincipal);
-    Query.Connection := ViewPrincipal.Conn;
+    Query := TIBQuery.Create(ViewPrincipal);
+    Query.Database := ViewPrincipal.IBDatabase;
+    Query.Transaction := ViewPrincipal.IBTransaction1;
     Query.Close;
     Query.SQL.Clear;
   except on E: Exception do
@@ -41,7 +44,7 @@ begin
   end;
 end;
 
-class procedure TUtils.DestroyQuery(var Query: TFDQuery);
+class procedure TUtils.DestroyQuery(var Query: TIBQuery);
 begin
   try
     Query.Close;
@@ -71,7 +74,7 @@ begin
   end;
 end;
 
-class procedure TUtils.SetConnection(var Connection: TFDConnection; out bancoConectado: String);
+class procedure TUtils.SetConnection(var Connection: TIBDatabase; out bancoConectado: String);
 begin
 
   try
@@ -82,6 +85,7 @@ begin
 
     if not(CheckConfig) then
     begin
+      GravarConfig('Host','');
       GravarConfig('Banco','');
       GravarConfig('Usuario','');
       GravarConfig('Senha','');
@@ -89,9 +93,10 @@ begin
     end;
 
     bancoConectado := ChangeFileExt(ExtractFileName(ReadConfig('Banco')), '');
-    Connection.Params.Values['Database'] := (ExtractFileDir(Application.ExeName) + '\' + ReadConfig('Banco'));
-    Connection.Params.Values['User_Name'] := ReadConfig('Usuario');
-    Connection.Params.Values['Password'] := ReadConfig('Senha');
+    //Connection.Params.Values['Database'] := (ExtractFileDir(Application.ExeName) + '\' + ReadConfig('Banco'));
+    Connection.DatabaseName := ReadConfig('Host')+':'+(ExtractFileDir(Application.ExeName) + '\' + ReadConfig('Banco'));
+    Connection.Params.Values['user_name'] := ReadConfig('Usuario');
+    Connection.Params.Values['password'] := ReadConfig('Senha');
     Connection.Connected := True;
   except on E: Exception do
     raise Exception.Create('Não foi possível estabelecer a conexão com o banco de dados.'+#13+

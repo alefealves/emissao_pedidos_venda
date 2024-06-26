@@ -2,7 +2,7 @@ object ViewPrincipal: TViewPrincipal
   Left = 0
   Top = 0
   Caption = 'ViewPrincipal'
-  ClientHeight = 1248
+  ClientHeight = 1238
   ClientWidth = 1658
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -16,7 +16,7 @@ object ViewPrincipal: TViewPrincipal
   TextHeight = 37
   object PanelStatus: TPanel
     Left = 0
-    Top = 1223
+    Top = 1213
     Width = 1658
     Height = 25
     Align = alBottom
@@ -48,14 +48,12 @@ object ViewPrincipal: TViewPrincipal
     Left = 0
     Top = 0
     Width = 1658
-    Height = 1223
+    Height = 1213
     Align = alClient
     AutoSize = True
     TabOrder = 1
-    ExplicitLeft = 888
-    ExplicitTop = 648
-    ExplicitWidth = 185
-    ExplicitHeight = 41
+    ExplicitWidth = 1634
+    ExplicitHeight = 1158
   end
   object MainMenu1: TMainMenu
     Left = 152
@@ -67,6 +65,7 @@ object ViewPrincipal: TViewPrincipal
       end
       object Clientes1: TMenuItem
         Caption = 'Clientes'
+        OnClick = Clientes1Click
       end
     end
     object Movimentos1: TMenuItem
@@ -82,14 +81,24 @@ object ViewPrincipal: TViewPrincipal
       end
     end
   end
-  object Conn: TFDConnection
+  object IBDatabase: TIBDatabase
+    Connected = True
+    DatabaseName = 'localhost:C:\Projetos Delphi\sistema_venda\DADOS.fdb'
     Params.Strings = (
-      'Database=C:\Projetos Delphi\sistema_venda\DADOS.fdb'
-      'User_Name=SYSDBA'
-      'Password=masterkey'
-      'DriverID=FB')
+      'user_name=SYSDBA'
+      'password=masterkey'
+      'lc_ctype=WIN1252')
     LoginPrompt = False
-    Left = 40
+    DefaultTransaction = IBTransaction1
+    ServerType = 'IBServer'
+    AllowStreamedConnected = False
+    Left = 56
     Top = 64
+  end
+  object IBTransaction1: TIBTransaction
+    Active = True
+    DefaultDatabase = IBDatabase
+    Left = 56
+    Top = 136
   end
 end

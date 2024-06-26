@@ -8,7 +8,7 @@ uses
   FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Error, FireDAC.UI.Intf,
   FireDAC.Phys.Intf, FireDAC.Stan.Def, FireDAC.Stan.Pool, FireDAC.Stan.Async,
   FireDAC.Phys, FireDAC.Phys.FB, FireDAC.Phys.FBDef, FireDAC.VCLUI.Wait,
-  FireDAC.Comp.Client, Vcl.StdCtrls, Vcl.ExtCtrls;
+  FireDAC.Comp.Client, Vcl.StdCtrls, Vcl.ExtCtrls, IBX.IBDatabase;
 
 type
   TViewPrincipal = class(TForm)
@@ -20,11 +20,13 @@ type
     Clientes1: TMenuItem;
     Vendas1: TMenuItem;
     Vendas2: TMenuItem;
-    Conn: TFDConnection;
     PanelStatus: TPanel;
     LabelStatus: TLabel;
     pnBack: TPanel;
+    IBDatabase: TIBDatabase;
+    IBTransaction1: TIBTransaction;
     procedure FormCreate(Sender: TObject);
+    procedure Clientes1Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -39,17 +41,18 @@ implementation
 {$R *.dfm}
 
 uses
-  Utils;
+  Utils,
+  View.Cliente.Buscar;
 
 procedure TViewPrincipal.FormCreate(Sender: TObject);
 var
   bancoConectado: string;
 begin
-  //ReportMemoryLeaksOnShutdown := True;
+  ReportMemoryLeaksOnShutdown := True;
   bancoConectado := '';
 
   try
-    TUtils.SetConnection(Conn, bancoConectado);
+    TUtils.SetConnection(IBDatabase, bancoConectado);
     LabelStatus.Caption := 'Data: ' + FormatDateTime('dd/mm/yyyy',Date) + ', Conectado a '+bancoConectado;
     LabelStatus.Font.Color := clGreen;
   except on E: Exception do
@@ -59,6 +62,16 @@ begin
       Exception.Create(e.Message);
       Application.Terminate();
     end;
+  end;
+end;
+
+procedure TViewPrincipal.Clientes1Click(Sender: TObject);
+begin
+  ViewClienteBuscar := TViewClienteBuscar.Create(nil);
+  try
+    ViewClienteBuscar.ShowModal;
+  finally
+    FreeAndNil(ViewClienteBuscar);
   end;
 end;
 
@@ -79,15 +92,6 @@ end;
 //  end;
 //end;
 //
-//procedure TViewPrincipal.Tanque1Click(Sender: TObject);
-//begin
-//  ViewTanqueBuscar := TViewTanqueBuscar.Create(nil);
-//  try
-//    ViewTanqueBuscar.ShowModal;
-//  finally
-//    FreeAndNil(ViewTanqueBuscar);
-//  end;
-//end;
 
 
 end.

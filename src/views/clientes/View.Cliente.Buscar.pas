@@ -55,7 +55,7 @@ begin
     end;
 
     DataSource1.DataSet.Close;
-    QListarClientes := ControllerCliente.ListarClientes(LCampo, Trim(edtBuscar.Text));
+    QListarClientes.SQL.Text := ControllerCliente.ListarClientes(LCampo, Trim(edtBuscar.Text));
     DataSource1.DataSet.Open;
   finally
     FreeAndNil(ControllerCliente);

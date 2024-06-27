@@ -22,8 +22,8 @@ object ViewPrincipal: TViewPrincipal
     Align = alBottom
     Padding.Right = 5
     TabOrder = 0
-    ExplicitTop = 1158
-    ExplicitWidth = 1634
+    ExplicitTop = 1163
+    ExplicitWidth = 1638
     object LabelStatus: TLabel
       Left = 1573
       Top = 1
@@ -52,8 +52,8 @@ object ViewPrincipal: TViewPrincipal
     Align = alClient
     AutoSize = True
     TabOrder = 1
-    ExplicitWidth = 1634
-    ExplicitHeight = 1158
+    ExplicitWidth = 1638
+    ExplicitHeight = 1163
   end
   object MainMenu1: TMainMenu
     Left = 152
@@ -62,6 +62,7 @@ object ViewPrincipal: TViewPrincipal
       Caption = 'Cadastros'
       object Produtos1: TMenuItem
         Caption = 'Produtos'
+        OnClick = Produtos1Click
       end
       object Clientes1: TMenuItem
         Caption = 'Clientes'

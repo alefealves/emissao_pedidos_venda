@@ -1,7 +1,22 @@
 inherited ViewClienteBuscar: TViewClienteBuscar
   Caption = 'Buscar Clientes'
+  ClientHeight = 1038
+  ClientWidth = 1460
   TextHeight = 32
+  inherited pnTop: TPanel
+    Width = 1460
+    DesignSize = (
+      1456
+      112)
+    inherited edtBuscar: TEdit
+      ExplicitWidth = 1032
+    end
+  end
   inherited pnGrid: TPanel
+    Width = 1460
+    Height = 784
+    ExplicitWidth = 1440
+    ExplicitHeight = 734
     inherited DBGrid1: TDBGrid
       Columns = <
         item
@@ -37,12 +52,39 @@ inherited ViewClienteBuscar: TViewClienteBuscar
     end
   end
   inherited pnBottom: TPanel
+    Top = 938
+    Width = 1460
+    ExplicitTop = 888
+    ExplicitWidth = 1440
     inherited rdGroupFiltros: TRadioGroup
       Columns = 2
       ItemIndex = 1
       Items.Strings = (
         'C'#243'digo (F1)'
         'Nome Fantasia (F2)')
+      ExplicitWidth = 710
+    end
+    inherited btnCadastrar: TBitBtn
+      ExplicitLeft = 711
+    end
+    inherited btnUtilizar: TBitBtn
+      ExplicitLeft = 1075
+    end
+    inherited btnFechar: TBitBtn
+      ExplicitLeft = 1257
+      ExplicitTop = 15
+    end
+    inherited btnAlterar: TBitBtn
+      ExplicitLeft = 893
+    end
+  end
+  inherited pnTotal: TPanel
+    Top = 898
+    Width = 1460
+    ExplicitTop = 848
+    ExplicitWidth = 1440
+    inherited lbTotal: TLabel
+      Height = 38
     end
   end
   inherited DataSource1: TDataSource
@@ -54,7 +96,7 @@ inherited ViewClienteBuscar: TViewClienteBuscar
     AutoCalcFields = False
     BufferChunks = 1000
     CachedUpdates = False
-    ParamCheck = True
+    ParamCheck = False
     SQL.Strings = (
       'SELECT * FROM CLIENTES ORDER BY 1')
     PrecommittedReads = False

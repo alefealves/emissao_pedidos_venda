@@ -15,7 +15,7 @@ type
   public
     constructor Create;
     destructor Destroy; override;
-    function ListarClientes(const LCampo: string; const LStrBuscar: string): TIBQuery;
+    function ListarClientes(const LCampo: string; const LStrBuscar: string): String;
     procedure CarregarCliente(Cliente: TCliente; AIdCliente: integer);
     function Salvar(Cliente: TCliente; var sErro: string): Boolean;
     function Excluir(AIdCliente: integer; out sErro: string): Boolean;
@@ -38,7 +38,7 @@ begin
   result := DAOCliente.Excluir(AIdCliente, sErro);
 end;
 
-function TControllerCliente.ListarClientes(const LCampo, LStrBuscar: string): TIBQuery;
+function TControllerCliente.ListarClientes(const LCampo, LStrBuscar: string): String;
 begin
   result := DAOCliente.ListarClientes(LCampo, LStrBuscar);
 end;

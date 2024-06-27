@@ -96,7 +96,7 @@ inherited ViewClienteCadastrar: TViewClienteCadastrar
     object edtID: TNumberBox
       Left = 24
       Top = 63
-      Width = 60
+      Width = 80
       Height = 40
       TabStop = False
       Color = clBtnFace

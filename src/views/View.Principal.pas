@@ -27,6 +27,7 @@ type
     IBTransaction1: TIBTransaction;
     procedure FormCreate(Sender: TObject);
     procedure Clientes1Click(Sender: TObject);
+    procedure Produtos1Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -42,7 +43,8 @@ implementation
 
 uses
   Utils,
-  View.Cliente.Buscar;
+  View.Cliente.Buscar,
+  View.Produto.Buscar;
 
 procedure TViewPrincipal.FormCreate(Sender: TObject);
 var
@@ -62,6 +64,16 @@ begin
       Exception.Create(e.Message);
       Application.Terminate();
     end;
+  end;
+end;
+
+procedure TViewPrincipal.Produtos1Click(Sender: TObject);
+begin
+  ViewProdutoBuscar := TViewProdutoBuscar.Create(nil);
+  try
+    ViewProdutoBuscar.ShowModal;
+  finally
+    FreeAndNil(ViewProdutoBuscar);
   end;
 end;
 

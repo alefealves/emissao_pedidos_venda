@@ -10,7 +10,12 @@ uses
   Cliente in 'src\models\Cliente.pas',
   DAO.Cliente in 'src\dao\DAO.Cliente.pas',
   Controller.Cliente in 'src\controllers\Controller.Cliente.pas',
-  View.Cliente.Cadastrar in 'src\views\clientes\View.Cliente.Cadastrar.pas' {ViewClienteCadastrar};
+  View.Cliente.Cadastrar in 'src\views\clientes\View.Cliente.Cadastrar.pas' {ViewClienteCadastrar},
+  Produto in 'src\models\Produto.pas',
+  DAO.Produto in 'src\dao\DAO.Produto.pas',
+  Controller.Produto in 'src\controllers\Controller.Produto.pas',
+  View.Produto.Buscar in 'src\views\produtos\View.Produto.Buscar.pas' {ViewProdutoBuscar},
+  View.Produto.Cadastrar in 'src\views\produtos\View.Produto.Cadastrar.pas' {ViewProdutoCadastrar};
 
 {$R *.res}
 
@@ -18,6 +23,5 @@ begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
   Application.CreateForm(TViewPrincipal, ViewPrincipal);
-  Application.CreateForm(TViewClienteCadastrar, ViewClienteCadastrar);
   Application.Run;
 end.

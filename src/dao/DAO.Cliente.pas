@@ -16,7 +16,7 @@ type
   private
     { private declarations }
   public
-    function ListarClientes(const LCampo: string; const LStrBuscar: string): TIBQuery;
+    function ListarClientes(const LCampo: string; const LStrBuscar: string): String;
     procedure CarregarCliente(oCliente: TCliente; AIdCliente: integer);
     function Salvar(oCliente: TCliente; out sErro: string): Boolean;
     function Excluir(AIdCliente: Integer; out sErro: string): Boolean;
@@ -86,6 +86,7 @@ function TDAOCliente.Salvar(oCliente: TCliente; out sErro: string): Boolean;
 var
   qry: TIBQuery;
 begin
+
   try
     TUtils.CreateQuery(qry);
 
@@ -140,7 +141,7 @@ begin
   end;
 end;
 
-function TDAOCliente.ListarClientes(const LCampo, LStrBuscar: string): TIBQuery;
+function TDAOCliente.ListarClientes(const LCampo, LStrBuscar: string): String;
 var
   termoBusca, Condicao: string;
   qry: TIBQuery;
@@ -158,12 +159,12 @@ begin
        Condicao := 'where ( lower(nome_fantasia) like ' + termoBusca + ' )';
 
     qry.SQL.Add(Condicao);
-    result := qry;
+    result := qry.SQL.Text;
     TUtils.DestroyQuery(qry);
   except on E: Exception do
     begin
       TUtils.DestroyQuery(qry);
-      Result := nil;
+      Result := '';
       Exception.Create(e.Message);
     end;
   end;

@@ -15,7 +15,12 @@ uses
   DAO.Produto in 'src\dao\DAO.Produto.pas',
   Controller.Produto in 'src\controllers\Controller.Produto.pas',
   View.Produto.Buscar in 'src\views\produtos\View.Produto.Buscar.pas' {ViewProdutoBuscar},
-  View.Produto.Cadastrar in 'src\views\produtos\View.Produto.Cadastrar.pas' {ViewProdutoCadastrar};
+  View.Produto.Cadastrar in 'src\views\produtos\View.Produto.Cadastrar.pas' {ViewProdutoCadastrar},
+  Pedido in 'src\models\Pedido.pas',
+  DAO.Pedido in 'src\dao\DAO.Pedido.pas',
+  Controller.Pedido in 'src\controllers\Controller.Pedido.pas',
+  View.Pedido.Buscar in 'src\views\pedidos\View.Pedido.Buscar.pas' {ViewPedidoBuscar},
+  View.Pedido.Cadastrar in 'src\views\pedidos\View.Pedido.Cadastrar.pas' {ViewPedidoCadastrar};
 
 {$R *.res}
 
@@ -23,5 +28,6 @@ begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
   Application.CreateForm(TViewPrincipal, ViewPrincipal);
+  Application.CreateForm(TViewPedidoCadastrar, ViewPedidoCadastrar);
   Application.Run;
 end.

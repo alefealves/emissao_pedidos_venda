@@ -9,11 +9,11 @@ uses
 
 type
   TViewProdutoBuscar = class(TViewHerancaBuscar)
-    QListarClientes: TIBQuery;
-    QListarClientesID: TIntegerField;
-    QListarClientesDESCRICAO: TIBStringField;
-    QListarClientesMARCA: TIBStringField;
-    QListarClientesPRECO: TIBBCDField;
+    QListarProdutos: TIBQuery;
+    QListarProdutosID: TIntegerField;
+    QListarProdutosDESCRICAO: TIBStringField;
+    QListarProdutosMARCA: TIBStringField;
+    QListarProdutosPRECO: TIBBCDField;
   private
   protected
     procedure BuscarDados; override;
@@ -54,7 +54,7 @@ begin
     end;
 
     DataSource1.DataSet.Close;
-    QListarClientes.SQL.Text := ControllerProduto.ListarProdutos(LCampo, Trim(edtBuscar.Text));
+    QListarProdutos.SQL.Text := ControllerProduto.ListarProdutos(LCampo, Trim(edtBuscar.Text));
     DataSource1.DataSet.Open;
   finally
     FreeAndNil(ControllerProduto);
@@ -91,6 +91,7 @@ var
 begin
 
   inherited;
+
   ControllerProduto := TControllerProduto.Create;
   try
 

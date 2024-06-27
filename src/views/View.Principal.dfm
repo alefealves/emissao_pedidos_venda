@@ -52,8 +52,7 @@ object ViewPrincipal: TViewPrincipal
     Align = alClient
     AutoSize = True
     TabOrder = 1
-    ExplicitWidth = 1638
-    ExplicitHeight = 1163
+    ExplicitTop = -5
   end
   object MainMenu1: TMainMenu
     Left = 152
@@ -72,7 +71,8 @@ object ViewPrincipal: TViewPrincipal
     object Movimentos1: TMenuItem
       Caption = 'Movimentos'
       object Vendas1: TMenuItem
-        Caption = 'Venda'
+        Caption = 'Pedidos'
+        OnClick = Vendas1Click
       end
     end
     object Relatrios1: TMenuItem

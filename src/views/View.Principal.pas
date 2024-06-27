@@ -28,6 +28,7 @@ type
     procedure FormCreate(Sender: TObject);
     procedure Clientes1Click(Sender: TObject);
     procedure Produtos1Click(Sender: TObject);
+    procedure Vendas1Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -44,7 +45,8 @@ implementation
 uses
   Utils,
   View.Cliente.Buscar,
-  View.Produto.Buscar;
+  View.Produto.Buscar,
+  View.Pedido.Buscar;
 
 procedure TViewPrincipal.FormCreate(Sender: TObject);
 var
@@ -86,6 +88,17 @@ begin
     FreeAndNil(ViewClienteBuscar);
   end;
 end;
+
+procedure TViewPrincipal.Vendas1Click(Sender: TObject);
+begin
+  ViewPedidoBuscar := TViewPedidoBuscar.Create(nil);
+  try
+    ViewPedidoBuscar.ShowModal;
+  finally
+    FreeAndNil(ViewPedidoBuscar);
+  end;
+end;
+
 
 //procedure TViewPrincipal.pnTelaInicialResize(Sender: TObject);
 //begin

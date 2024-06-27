@@ -3,7 +3,16 @@ inherited ViewProdutoBuscar: TViewProdutoBuscar
   ExplicitWidth = 1452
   ExplicitHeight = 1026
   TextHeight = 32
+  inherited pnTop: TPanel
+    ExplicitWidth = 1420
+    inherited edtBuscar: TEdit
+      Width = 1032
+      ExplicitWidth = 1012
+    end
+  end
   inherited pnGrid: TPanel
+    ExplicitWidth = 1420
+    ExplicitHeight = 684
     inherited DBGrid1: TDBGrid
       Width = 1440
       Height = 734
@@ -31,6 +40,8 @@ inherited ViewProdutoBuscar: TViewProdutoBuscar
     end
   end
   inherited pnBottom: TPanel
+    ExplicitTop = 838
+    ExplicitWidth = 1420
     inherited rdGroupFiltros: TRadioGroup
       Width = 710
       Columns = 2
@@ -51,6 +62,7 @@ inherited ViewProdutoBuscar: TViewProdutoBuscar
     inherited btnFechar: TBitBtn
       Left = 1257
       ExplicitLeft = 1237
+      ExplicitTop = 15
     end
     inherited btnAlterar: TBitBtn
       Left = 893
@@ -58,6 +70,8 @@ inherited ViewProdutoBuscar: TViewProdutoBuscar
     end
   end
   inherited pnTotal: TPanel
+    ExplicitTop = 798
+    ExplicitWidth = 1420
     inherited lbTotal: TLabel
       Left = 1118
       Height = 38
@@ -65,9 +79,9 @@ inherited ViewProdutoBuscar: TViewProdutoBuscar
     end
   end
   inherited DataSource1: TDataSource
-    DataSet = QListarClientes
+    DataSet = QListarProdutos
   end
-  object QListarClientes: TIBQuery
+  object QListarProdutos: TIBQuery
     Database = ViewPrincipal.IBDatabase
     Transaction = ViewPrincipal.IBTransaction1
     AutoCalcFields = False
@@ -79,7 +93,7 @@ inherited ViewProdutoBuscar: TViewProdutoBuscar
     PrecommittedReads = False
     Left = 64
     Top = 282
-    object QListarClientesID: TIntegerField
+    object QListarProdutosID: TIntegerField
       DisplayLabel = 'C'#243'digo'
       FieldName = 'ID'
       Origin = 'CLIENTES.ID'
@@ -87,21 +101,21 @@ inherited ViewProdutoBuscar: TViewProdutoBuscar
       Required = True
       DisplayFormat = '000000'
     end
-    object QListarClientesDESCRICAO: TIBStringField
+    object QListarProdutosDESCRICAO: TIBStringField
       DisplayLabel = 'Descri'#231#227'o'
       FieldName = 'DESCRICAO'
       Origin = 'PRODUTOS.DESCRICAO'
       Required = True
       Size = 100
     end
-    object QListarClientesMARCA: TIBStringField
+    object QListarProdutosMARCA: TIBStringField
       DisplayLabel = 'Marca'
       FieldName = 'MARCA'
       Origin = 'PRODUTOS.MARCA'
       Required = True
       Size = 30
     end
-    object QListarClientesPRECO: TIBBCDField
+    object QListarProdutosPRECO: TIBBCDField
       DisplayLabel = 'Pre'#231'o'
       FieldName = 'PRECO'
       Origin = 'PRODUTOS.PRECO'

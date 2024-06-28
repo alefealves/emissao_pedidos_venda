@@ -1,23 +1,19 @@
 inherited ViewClienteBuscar: TViewClienteBuscar
   Caption = 'Buscar Clientes'
-  ClientHeight = 1038
   ClientWidth = 1460
   TextHeight = 32
   inherited pnTop: TPanel
     Width = 1460
-    DesignSize = (
-      1456
-      112)
     inherited edtBuscar: TEdit
-      ExplicitWidth = 1032
+      ExplicitWidth = 1072
     end
   end
   inherited pnGrid: TPanel
     Width = 1460
-    Height = 784
     ExplicitWidth = 1440
     ExplicitHeight = 734
     inherited DBGrid1: TDBGrid
+      Height = 734
       Columns = <
         item
           Expanded = False
@@ -52,7 +48,6 @@ inherited ViewClienteBuscar: TViewClienteBuscar
     end
   end
   inherited pnBottom: TPanel
-    Top = 938
     Width = 1460
     ExplicitTop = 888
     ExplicitWidth = 1440
@@ -79,7 +74,6 @@ inherited ViewClienteBuscar: TViewClienteBuscar
     end
   end
   inherited pnTotal: TPanel
-    Top = 898
     Width = 1460
     ExplicitTop = 848
     ExplicitWidth = 1440

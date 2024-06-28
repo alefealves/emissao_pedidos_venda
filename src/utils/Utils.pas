@@ -25,6 +25,7 @@ type
     class function ReadConfig(key: String): String;
     class procedure GravarConfig(key, value: string);
     class procedure Mensagem(Mensagem: String);
+    class function GetLastIdTable(Table: String): Integer;
   end;
 
 implementation
@@ -146,6 +147,25 @@ begin
     fileConfig.WriteString('Configuracoes', key, value);
     fileConfig.Free;
   except on E: Exception do
+    raise Exception.Create(E.Message);
+  end;
+end;
+
+class function TUtils.GetLastIdTable(Table: String): Integer;
+var
+  qry: TIBQuery;
+begin
+
+  try
+
+    Self.CreateQuery(qry);
+    qry.SQL.Add('select gen_id(GEN_'+Table+'_ID, 0) ID from rdb$database;');
+    qry.Open;
+
+    result := qry.FieldByName('ID').AsInteger;
+    Self.DestroyQuery(qry);
+  except on E: Exception do
+
     raise Exception.Create(E.Message);
   end;
 end;

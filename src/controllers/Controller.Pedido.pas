@@ -19,6 +19,7 @@ type
     procedure CarregarPedido(Pedido: TPedido; AIdPedido: integer);
     function Salvar(Pedido: TPedido; var sErro: string): Boolean;
     function Excluir(AIdPedido: integer; out sErro: string): Boolean;
+    function SomaTotalPedido(AIdPedido: Integer; out sErro: string): Currency;
   end;
 
 implementation
@@ -46,6 +47,11 @@ end;
 function TControllerPedido.Salvar(Pedido: TPedido; var sErro: string): Boolean;
 begin
   result := DAOPedido.Salvar(Pedido, sErro);
+end;
+
+function TControllerPedido.SomaTotalPedido(AIdPedido: Integer; out sErro: string): Currency;
+begin
+  result := DAOPedido.SomaTotalPedido(AIdPedido, sErro);
 end;
 
 constructor TControllerPedido.Create;

@@ -21,6 +21,7 @@ type
     function Salvar(oPedido: TPedido; out sErro: string): Boolean;
     function Excluir(AIdPedido: Integer; out sErro: string): Boolean;
     function LookProduto(oPedido: TPedido; AIdPedido: Integer; out sErro: string): Boolean;
+    function SomaTotalPedido(AIdPedido: Integer; out sErro: string): Currency;
   end;
 
 implementation
@@ -92,27 +93,22 @@ begin
     begin
       qry.SQL.Add('INSERT INTO PEDIDOS ');
       qry.SQL.Add('(ID_CLIENTE ');
-      qry.SQL.Add(',VALOR_TOTAL ');
-      qry.SQL.Add(',DATA) ');
+      qry.SQL.Add(',VALOR_TOTAL) ');
       qry.SQL.Add('VALUES(:ID_CLIENTE ');
-      qry.SQL.Add(',:VALOR_TOTAL ');
-      qry.SQL.Add(',:DATA)');
+      qry.SQL.Add(',:VALOR_TOTAL)');
 
       qry.ParamByName('ID_CLIENTE').AsInteger := oPedido.Id_Cliente;
       qry.ParamByName('VALOR_TOTAL').AsCurrency := oPedido.Valor_Total;
-      qry.ParamByName('DATA').AsDateTime := oPedido.Data;
     end
     else
     begin
       qry.SQL.Add('UPDATE PEDIDOS ');
       qry.SQL.Add('SET ID_CLIENTE = :ID_CLIENTE ');
       qry.SQL.Add(',VALOR_TOTAL = :VALOR_TOTAL ');
-      qry.SQL.Add(',DATA = :DATA ');
       qry.SQL.Add('WHERE ID = :ID');
 
       qry.ParamByName('ID_CLIENTE').AsInteger := oPedido.Id_Cliente;
       qry.ParamByName('VALOR_TOTAL').AsCurrency := oPedido.Valor_Total;
-      qry.ParamByName('DATA').AsDateTime := oPedido.Data;
 
       qry.ParamByName('ID').AsInteger := oPedido.Id;
     end;
@@ -196,6 +192,35 @@ begin
       TUtils.DestroyQuery(qry);
       Result := False;
       sErro := 'Ocorreu um erro ao buscar o pedido: ' + sLineBreak + E.Message;
+    end;
+  end;
+end;
+
+function TDAOPedido.SomaTotalPedido(AIdPedido: Integer; out sErro: string): Currency;
+var
+  qry: TIBQuery;
+begin
+
+  try
+    TUtils.CreateQuery(qry);
+
+    qry.SQL.Add('SELECT SOMA_TOTAL_PEDIDO_FUNC(:ID_PEDIDO) TOTAL_GERAL ');
+    qry.SQL.Add('FROM RDB$DATABASE; ');
+    qry.ParamByName('ID_PEDIDO').AsInteger := AIdPedido;
+
+    qry.Open();
+
+    if not (qry.IsEmpty)then
+      result := qry.FieldByName('TOTAL_GERAL').AsCurrency
+    else
+      result := 0;
+
+    TUtils.DestroyQuery(qry);
+  except on E: Exception do
+    begin
+      TUtils.DestroyQuery(qry);
+      result := 0;
+      sErro := 'Ocorreu um erro ao somar o total do pedido: ' + sLineBreak + E.Message;
     end;
   end;
 end;

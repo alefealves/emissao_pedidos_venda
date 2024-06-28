@@ -96,7 +96,7 @@ begin
     if not ControllerCliente.Excluir(IdSelecionado,sErro) then
       raise Exception.Create(sErro)
     else
-      Application.MessageBox('Regitro excluído com sucesso', 'Atenção', MB_OK +
+      Application.MessageBox('Registro excluído com sucesso', 'Atenção', MB_OK +
         MB_ICONWARNING);
 
   finally

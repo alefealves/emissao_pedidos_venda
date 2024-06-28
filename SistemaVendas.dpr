@@ -20,7 +20,11 @@ uses
   DAO.Pedido in 'src\dao\DAO.Pedido.pas',
   Controller.Pedido in 'src\controllers\Controller.Pedido.pas',
   View.Pedido.Buscar in 'src\views\pedidos\View.Pedido.Buscar.pas' {ViewPedidoBuscar},
-  View.Pedido.Cadastrar in 'src\views\pedidos\View.Pedido.Cadastrar.pas' {ViewPedidoCadastrar};
+  View.Pedido.Cadastrar in 'src\views\pedidos\View.Pedido.Cadastrar.pas' {ViewPedidoCadastrar},
+  Pedido_Item in 'src\models\Pedido_Item.pas',
+  DAO.Pedido_Item in 'src\dao\DAO.Pedido_Item.pas',
+  Controller.Pedido_Item in 'src\controllers\Controller.Pedido_Item.pas',
+  View.PedidoItens.Cadastrar in 'src\views\pedidos_itens\View.PedidoItens.Cadastrar.pas' {ViewPedidoItemCadastrar};
 
 {$R *.res}
 
@@ -28,6 +32,5 @@ begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
   Application.CreateForm(TViewPrincipal, ViewPrincipal);
-  Application.CreateForm(TViewPedidoCadastrar, ViewPedidoCadastrar);
   Application.Run;
 end.

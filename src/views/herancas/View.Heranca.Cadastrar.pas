@@ -20,11 +20,9 @@ type
   private
     FIdRegistroAlterar: Integer;
     FUltId: Integer;
-    FAbastecendo: Boolean;
   public
     property IdRegistroAlterar: Integer read FIdRegistroAlterar write FIdRegistroAlterar;
     property UltId: Integer read FUltId;
-    property Abastecendo: Boolean read FAbastecendo write FAbastecendo;
   end;
 
 var
@@ -50,7 +48,6 @@ end;
 procedure TViewHerancaCadastrar.FormCreate(Sender: TObject);
 begin
   FIdRegistroAlterar := 0;
-  FAbastecendo := False;
 end;
 
 procedure TViewHerancaCadastrar.FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);

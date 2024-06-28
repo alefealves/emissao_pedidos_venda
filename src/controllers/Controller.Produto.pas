@@ -19,6 +19,7 @@ type
     procedure CarregarProduto(Produto: TProduto; AIdProduto: integer);
     function Salvar(Produto: TProduto; var sErro: string): Boolean;
     function Excluir(AIdProduto: integer; out sErro: string): Boolean;
+    function LookProduto(Produto: TProduto; AIdProduto: integer; var sErro: string): Boolean;
   end;
 
 implementation
@@ -46,6 +47,11 @@ end;
 function TControllerProduto.Salvar(Produto: TProduto; var sErro: string): Boolean;
 begin
   result := DAOProduto.Salvar(Produto, sErro);
+end;
+
+function TControllerProduto.LookProduto(Produto: TProduto; AIdProduto: integer; var sErro: string): Boolean;
+begin
+  result := DAOProduto.LookProduto(Produto, AIdProduto, sErro);
 end;
 
 constructor TControllerProduto.Create;

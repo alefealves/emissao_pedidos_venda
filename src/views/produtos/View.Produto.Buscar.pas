@@ -80,8 +80,6 @@ begin
   finally
     ViewProdutoCadastrar.Free;
   end;
-
-  inherited;
 end;
 
 procedure TViewProdutoBuscar.Excluir;
@@ -98,7 +96,7 @@ begin
     if not ControllerProduto.Excluir(IdSelecionado,sErro) then
       raise Exception.Create(sErro)
     else
-      Application.MessageBox('Regitro excluído com sucesso', 'Atenção', MB_OK +
+      Application.MessageBox('Registro excluído com sucesso', 'Atenção', MB_OK +
         MB_ICONWARNING);
 
   finally

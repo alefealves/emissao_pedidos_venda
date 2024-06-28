@@ -18,7 +18,7 @@ type
   private
   protected
     procedure BuscarDados; override;
-    //procedure ChamarTelaCadastrar(const AId: Integer = 0); override;
+    procedure ChamarTelaCadastrar(const AId: Integer = 0); override;
     procedure Excluir; override;
   public
     { Public declarations }
@@ -33,6 +33,7 @@ implementation
 
 uses
   View.Principal,
+  View.Pedido.Cadastrar,
   Controller.Pedido,
   Utils;
 
@@ -63,26 +64,24 @@ begin
   inherited;
 end;
 
-//procedure TViewPedidoBuscar.ChamarTelaCadastrar(const AId: Integer);
-//var
-//  ViewProdutoCadastrar: TViewProdutoCadastrar;
-//begin
-//
-//  inherited;
-//  ViewProdutoCadastrar := TViewProdutoCadastrar.Create(nil);
-//  try
-//    ViewProdutoCadastrar.IdRegistroAlterar := AId;
-//    if(ViewProdutoCadastrar.ShowModal = mrOk)then
-//    begin
-//      inherited UltId := ViewProdutoCadastrar.UltId;
-//      Self.BuscarDados;
-//    end;
-//  finally
-//    ViewProdutoCadastrar.Free;
-//  end;
-//
-//  inherited;
-//end;
+procedure TViewPedidoBuscar.ChamarTelaCadastrar(const AId: Integer = 0);
+var
+  ViewPedidoCadastrar: TViewPedidoCadastrar;
+begin
+
+  inherited;
+  ViewPedidoCadastrar := TViewPedidoCadastrar.Create(nil);
+  try
+    ViewPedidoCadastrar.IdRegistroAlterar := AId;
+    if(ViewPedidoCadastrar.ShowModal = mrOk)then
+    begin
+      inherited UltId := ViewPedidoCadastrar.UltId;
+      Self.BuscarDados;
+    end;
+  finally
+    ViewPedidoCadastrar.Free;
+  end;
+end;
 
 procedure TViewPedidoBuscar.Excluir;
 var
@@ -98,7 +97,7 @@ begin
     if not ControllerPedido.Excluir(IdSelecionado,sErro) then
       raise Exception.Create(sErro)
     else
-      Application.MessageBox('Regitro excluído com sucesso', 'Atenção', MB_OK +
+      Application.MessageBox('Registro excluído com sucesso', 'Atenção', MB_OK +
         MB_ICONWARNING);
 
   finally

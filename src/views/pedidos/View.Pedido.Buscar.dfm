@@ -4,11 +4,8 @@ inherited ViewPedidoBuscar: TViewPedidoBuscar
   TextHeight = 32
   inherited pnTop: TPanel
     Width = 1460
-    DesignSize = (
-      1456
-      112)
     inherited edtBuscar: TEdit
-      Width = 1072
+      ExplicitWidth = 1052
     end
   end
   inherited pnGrid: TPanel
@@ -109,6 +106,7 @@ inherited ViewPedidoBuscar: TViewPedidoBuscar
       FieldName = 'VALOR_TOTAL'
       Origin = 'PEDIDOS.VALOR_TOTAL'
       Required = True
+      DisplayFormat = ',,0.00'
       Precision = 18
       Size = 2
     end

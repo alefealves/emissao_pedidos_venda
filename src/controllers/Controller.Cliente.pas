@@ -19,6 +19,7 @@ type
     procedure CarregarCliente(Cliente: TCliente; AIdCliente: integer);
     function Salvar(Cliente: TCliente; var sErro: string): Boolean;
     function Excluir(AIdCliente: integer; out sErro: string): Boolean;
+    function LookCliente(Cliente: TCliente; AIdCliente: integer; var sErro: string): Boolean;
   end;
 
 implementation
@@ -46,6 +47,11 @@ end;
 function TControllerCliente.Salvar(Cliente: TCliente; var sErro: string): Boolean;
 begin
   result := DAOCliente.Salvar(Cliente, sErro);
+end;
+
+function TControllerCliente.LookCliente(Cliente: TCliente; AIdCliente: integer; var sErro: string): Boolean;
+begin
+  result := DAOCliente.LookCliente(Cliente, AIdCliente, sErro);
 end;
 
 constructor TControllerCliente.Create;

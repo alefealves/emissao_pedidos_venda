@@ -6,8 +6,8 @@ inherited ViewProdutoBuscar: TViewProdutoBuscar
   inherited pnTop: TPanel
     ExplicitWidth = 1420
     inherited edtBuscar: TEdit
-      Width = 1032
-      ExplicitWidth = 1012
+      Width = 972
+      ExplicitWidth = 952
     end
   end
   inherited pnGrid: TPanel
@@ -120,6 +120,7 @@ inherited ViewProdutoBuscar: TViewProdutoBuscar
       FieldName = 'PRECO'
       Origin = 'PRODUTOS.PRECO'
       Required = True
+      DisplayFormat = ',,0.00'
       Precision = 18
       Size = 2
     end

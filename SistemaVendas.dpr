@@ -25,14 +25,16 @@ uses
   DAO.Pedido_Item in 'src\dao\DAO.Pedido_Item.pas',
   Controller.Pedido_Item in 'src\controllers\Controller.Pedido_Item.pas',
   View.PedidoItens.Cadastrar in 'src\views\pedidos_itens\View.PedidoItens.Cadastrar.pas' {ViewPedidoItemCadastrar},
-  View.Report.Pedido in 'src\views\relatorios\View.Report.Pedido.pas' {ViewReportPedido};
+  View.Relatorio.Vendas in 'src\views\relatorios\View.Relatorio.Vendas.pas' {ViewRelatorioVendas},
+  View.Pedido.Report in 'src\views\relatorios\View.Pedido.Report.pas' {ViewPedidoReport};
 
 {$R *.res}
 
 begin
+  //ReportMemoryLeaksOnShutdown := True;
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
   Application.CreateForm(TViewPrincipal, ViewPrincipal);
-  Application.CreateForm(TViewReportPedido, ViewReportPedido);
+  Application.CreateForm(TViewPedidoReport, ViewPedidoReport);
   Application.Run;
 end.

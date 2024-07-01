@@ -22,8 +22,8 @@ object ViewPrincipal: TViewPrincipal
     Align = alBottom
     Padding.Right = 5
     TabOrder = 0
-    ExplicitTop = 1163
-    ExplicitWidth = 1638
+    ExplicitTop = 1164
+    ExplicitWidth = 1642
     object LabelStatus: TLabel
       Left = 1573
       Top = 1
@@ -52,8 +52,8 @@ object ViewPrincipal: TViewPrincipal
     Align = alClient
     AutoSize = True
     TabOrder = 1
-    ExplicitWidth = 1638
-    ExplicitHeight = 1163
+    ExplicitWidth = 1642
+    ExplicitHeight = 1164
   end
   object MainMenu1: TMainMenu
     Left = 152
@@ -80,10 +80,12 @@ object ViewPrincipal: TViewPrincipal
       Caption = 'Relat'#243'rios'
       object Vendas2: TMenuItem
         Caption = 'Vendas'
+        OnClick = Vendas2Click
       end
     end
   end
   object IBDatabase: TIBDatabase
+    Connected = True
     DatabaseName = 'localhost:C:\Projetos Delphi\sistema_venda\DADOS.fdb'
     Params.Strings = (
       'user_name=SYSDBA'
@@ -97,6 +99,7 @@ object ViewPrincipal: TViewPrincipal
     Top = 64
   end
   object IBTransaction1: TIBTransaction
+    Active = True
     DefaultDatabase = IBDatabase
     Left = 56
     Top = 136

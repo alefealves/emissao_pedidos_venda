@@ -1,9 +1,9 @@
-object ViewReportPedido: TViewReportPedido
+object ViewPedidoReport: TViewPedidoReport
   Left = 0
   Top = 0
-  Caption = 'Pedido'
-  ClientHeight = 884
-  ClientWidth = 1256
+  Caption = 'ViewPedidoReport'
+  ClientHeight = 882
+  ClientWidth = 1248
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText

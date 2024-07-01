@@ -121,10 +121,10 @@ var
 begin
 
   Self.HabilitaCampos;
-  ControllerPedido := TControllerPedido.Create;
-  Pedido := TPedido.Create;
   try
     //carrega cabeçalho
+    ControllerPedido := TControllerPedido.Create;
+    Pedido := TPedido.Create;
     ControllerPedido.CarregarPedido(Pedido, inherited IdRegistroAlterar);
     FId_Cliente := Pedido.Id_Cliente;
     edtID.Value := Pedido.Id;
@@ -189,14 +189,14 @@ begin
   if not (ValidarDados) then
     Exit;
 
-  ControllerPedido := TControllerPedido.Create;
-  Pedido := TPedido.Create;
   if (IdRegistroAlterar = 0) then
     sMsg := 'Registro salvo com sucesso'
   else
     sMsg := 'Registro alterado com sucesso';
 
   try
+    ControllerPedido := TControllerPedido.Create;
+    Pedido := TPedido.Create;
 
     Pedido.Id := IdRegistroAlterar;
     Pedido.Id_Cliente := edtId_Cliente.ValueInt;
@@ -260,10 +260,9 @@ begin
   if(Trim(edtId_Cliente.Text).IsEmpty)then
     Exit;
 
-  ControllerCliente := TControllerCliente.Create;
-  Cliente := TCliente.Create;
-
   try
+    ControllerCliente := TControllerCliente.Create;
+    Cliente := TCliente.Create;
 
     if not ControllerCliente.LookCliente(Cliente,StrToInt(edtId_Cliente.Text),sErro) then
       raise Exception.Create(sErro)
@@ -343,8 +342,9 @@ begin
   then
     Exit;
 
-  ControllerPedidoItem := TControllerPedidoItem.Create;
   try
+    ControllerPedidoItem := TControllerPedidoItem.Create;
+
     idItem := dsItens.DataSet.FieldByName('ID').AsInteger;
     idPedido := dsItens.DataSet.FieldByName('ID_PEDIDO').AsInteger;
     if not ControllerPedidoItem.Excluir(idItem, idPedido, sErro) then
@@ -383,8 +383,9 @@ begin
   idPedido := edtID.ValueInt;
   idItem := 0;
 
-  ViewPedidoItemCadastrar := TViewPedidoItemCadastrar.Create(nil);
   try
+    ViewPedidoItemCadastrar := TViewPedidoItemCadastrar.Create(nil);
+
     ViewPedidoItemCadastrar.IdRegistroAlterar := idItem;
     ViewPedidoItemCadastrar.IdPedido := idPedido;
     if(ViewPedidoItemCadastrar.ShowModal = mrOk)then
@@ -553,6 +554,7 @@ var
 begin
 
   msg:='Pedido sem itens, favor verificar.';
+  msgQuestion:='';
   if(dsItens.DataSet.IsEmpty)then begin
     Application.MessageBox(msg, 'Atenção', MB_OK +
         MB_ICONWARNING);
@@ -601,7 +603,6 @@ var
   ControllerPedido: TControllerPedido;
   Pedido: TPedido;
   sErro: string;
-  sMsg: PWideChar;
 begin
   try
     ControllerPedido := TControllerPedido.Create;

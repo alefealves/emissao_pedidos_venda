@@ -3,10 +3,11 @@ inherited ViewPedidoCadastrar: TViewPedidoCadastrar
   ClientHeight = 614
   ClientWidth = 1544
   Font.Height = -24
+  StyleElements = [seFont, seClient, seBorder]
   OnCloseQuery = FormCloseQuery
   OnShow = FormShow
-  ExplicitWidth = 1556
-  ExplicitHeight = 652
+  ExplicitWidth = 1560
+  ExplicitHeight = 653
   TextHeight = 32
   inherited pnDados: TPanel
     Width = 1544
@@ -15,8 +16,9 @@ inherited ViewPedidoCadastrar: TViewPedidoCadastrar
     Margins.Top = 6
     Margins.Right = 6
     Margins.Bottom = 6
-    ExplicitWidth = 1524
-    ExplicitHeight = 482
+    StyleElements = [seFont, seClient, seBorder]
+    ExplicitWidth = 1528
+    ExplicitHeight = 483
     object pnCabecalho: TPanel
       Left = 1
       Top = 1
@@ -24,7 +26,7 @@ inherited ViewPedidoCadastrar: TViewPedidoCadastrar
       Height = 230
       Align = alTop
       TabOrder = 0
-      ExplicitWidth = 1522
+      ExplicitWidth = 1526
       object Label1: TLabel
         Left = 24
         Top = 25
@@ -256,6 +258,7 @@ inherited ViewPedidoCadastrar: TViewPedidoCadastrar
         Top = 154
         Width = 200
         Height = 40
+        Hint = 'Imprimir Pedido'
         Caption = 'Imprimir'
         Glyph.Data = {
           F6060000424DF606000000000000360000002800000018000000180000000100
@@ -314,6 +317,8 @@ inherited ViewPedidoCadastrar: TViewPedidoCadastrar
           FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
           FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
           FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
+        ParentShowHint = False
+        ShowHint = True
         TabOrder = 9
         TabStop = False
         OnClick = btnImprimirClick
@@ -326,8 +331,8 @@ inherited ViewPedidoCadastrar: TViewPedidoCadastrar
       Height = 300
       Align = alClient
       TabOrder = 1
-      ExplicitWidth = 1522
-      ExplicitHeight = 250
+      ExplicitWidth = 1526
+      ExplicitHeight = 251
       object dbGridItens: TDBGrid
         Left = 1
         Top = 51
@@ -397,7 +402,7 @@ inherited ViewPedidoCadastrar: TViewPedidoCadastrar
         Height = 50
         Align = alTop
         TabOrder = 1
-        ExplicitWidth = 1520
+        ExplicitWidth = 1524
         object btnAdicionar: TBitBtn
           Left = 1
           Top = 1
@@ -551,8 +556,9 @@ inherited ViewPedidoCadastrar: TViewPedidoCadastrar
     Margins.Top = 6
     Margins.Right = 6
     Margins.Bottom = 6
-    ExplicitTop = 482
-    ExplicitWidth = 1524
+    StyleElements = [seFont, seClient, seBorder]
+    ExplicitTop = 483
+    ExplicitWidth = 1528
     ExplicitHeight = 82
     inherited btnCancelar: TBitBtn
       Left = 1283
@@ -562,7 +568,7 @@ inherited ViewPedidoCadastrar: TViewPedidoCadastrar
       Margins.Top = 6
       Margins.Right = 6
       Margins.Bottom = 6
-      ExplicitLeft = 1263
+      ExplicitLeft = 1267
       ExplicitWidth = 260
       ExplicitHeight = 80
     end
@@ -574,7 +580,7 @@ inherited ViewPedidoCadastrar: TViewPedidoCadastrar
       Margins.Top = 6
       Margins.Right = 6
       Margins.Bottom = 6
-      ExplicitLeft = 1003
+      ExplicitLeft = 1007
       ExplicitWidth = 260
       ExplicitHeight = 80
     end

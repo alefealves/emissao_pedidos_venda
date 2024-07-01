@@ -14,6 +14,7 @@ uses
   IBX.IBErrorCodes,
   IBX.IBSQL,
   IBX.IB,
+  ShlObj,
   View.Principal;
 
 type
@@ -35,6 +36,7 @@ type
     class function IsTelefoneValido(const telefone: string): Boolean;
     class function TratarExcecaoBD(E: EIBInterBaseError) : string;
     class function ExtrairIdMensagemErro(const MensagemErro: string): Integer;
+    class function GetDesktopPath: string;
   end;
 
 implementation
@@ -164,18 +166,19 @@ class function TUtils.GetLastIdTable(Table: String): Integer;
 var
   qry: TIBQuery;
 begin
-
   try
+    try
 
-    Self.CreateQuery(qry);
-    qry.SQL.Add('select gen_id(GEN_'+Table+'_ID, 0) ID from rdb$database;');
-    qry.Open;
+      Self.CreateQuery(qry);
+      qry.SQL.Add('select gen_id(GEN_'+Table+'_ID, 0) ID from rdb$database;');
+      qry.Open;
 
-    result := qry.FieldByName('ID').AsInteger;
+      result := qry.FieldByName('ID').AsInteger;
+    except on E: Exception do
+      raise Exception.Create(E.Message);
+    end;
+  finally
     Self.DestroyQuery(qry);
-  except on E: Exception do
-
-    raise Exception.Create(E.Message);
   end;
 end;
 
@@ -249,35 +252,37 @@ end;
 
 class function TUtils.TratarExcecaoBD(E: EIBInterBaseError) : string;
 var
-  MensagemErro: string;
   idException: Integer;
   qry: TIBQuery;
 begin
 
   try
+    try
 
-    idException := ExtrairIdMensagemErro(E.Message);
-    if (idException > 0) then begin
+      idException := ExtrairIdMensagemErro(E.Message);
+      if (idException > 0) then begin
 
-      Self.CreateQuery(qry);
-      qry.SQL.Add('select message from exceptions where id = :id');
-      qry.ParamByName('id').AsInteger := idException;
-      qry.Open;
+        Self.CreateQuery(qry);
+        qry.SQL.Add('select message from exceptions where id = :id');
+        qry.ParamByName('id').AsInteger := idException;
+        qry.Open;
 
-      if not (qry.IsEmpty) then
-      begin
-        result := qry.FieldByName('message').AsString;
+        if not (qry.IsEmpty) then
+        begin
+          result := qry.FieldByName('message').AsString;
+        end
+        else
+          result := 'Ocorreu um erro no banco de dados: ' + sLineBreak + E.Message;
+
       end
       else
         result := 'Ocorreu um erro no banco de dados: ' + sLineBreak + E.Message;
 
-      Self.DestroyQuery(qry);
-    end
-    else
-      result := 'Ocorreu um erro no banco de dados: ' + sLineBreak + E.Message;
-
-  except on E: Exception do
-    raise Exception.Create(E.Message);
+    except on E: Exception do
+      raise Exception.Create(E.Message);
+    end;
+  finally
+    Self.DestroyQuery(qry);
   end;
 end;
 
@@ -296,6 +301,16 @@ begin
       Result := StrToInt(Copy(MensagemErro, Inicio, Fim - Inicio));
     end;
   end;
+end;
+
+class function TUtils.GetDesktopPath: string;
+var
+  Path: array[0..MAX_PATH] of Char;
+begin
+  if SHGetFolderPath(0, CSIDL_DESKTOP, 0, SHGFP_TYPE_CURRENT, @Path[0]) = S_OK then
+    Result := Path
+  else
+    Result := '';
 end;
 
 end.

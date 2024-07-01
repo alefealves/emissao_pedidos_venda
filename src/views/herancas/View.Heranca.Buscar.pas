@@ -68,16 +68,23 @@ procedure TViewHerancaBuscar.ApplyBestFitGrid;
 var
   i, maxWidth: Integer;
   ColWidth: Integer;
+  DisplayValue: string;
 begin
   for i := 0 to DBGrid1.Columns.Count - 1 do
   begin
     maxWidth := DBGrid1.Canvas.TextWidth(DBGrid1.Columns[i].Title.Caption) + 10;
     DataSource1.DataSet.First;
-    while not  DataSource1.DataSet.Eof do
+    while not DataSource1.DataSet.Eof do
     begin
-      ColWidth := DBGrid1.Canvas.TextWidth(DataSource1.DataSet.Fields[i].AsString) + 10;
+      if DataSource1.DataSet.Fields[i].IsNull then
+        DisplayValue := ''
+      else
+        DisplayValue := DataSource1.DataSet.Fields[i].DisplayText;
+
+      ColWidth := DBGrid1.Canvas.TextWidth(DisplayValue) + 10;
       if ColWidth > maxWidth then
         maxWidth := ColWidth;
+
        DataSource1.DataSet.Next;
     end;
     DBGrid1.Columns[i].Width := maxWidth;

@@ -17,8 +17,8 @@ inherited ViewClienteCadastrar: TViewClienteCadastrar
     ExplicitWidth = 1544
     ExplicitHeight = 444
     object Label2: TLabel
-      Left = 171
-      Top = 113
+      Left = 251
+      Top = 109
       Width = 135
       Height = 32
       Caption = 'Nome Social'
@@ -45,8 +45,8 @@ inherited ViewClienteCadastrar: TViewClienteCadastrar
       Caption = 'Endere'#231'o'
     end
     object Label5: TLabel
-      Left = 477
-      Top = 113
+      Left = 557
+      Top = 109
       Width = 132
       Height = 32
       Caption = 'Raz'#227'o Social'
@@ -59,32 +59,18 @@ inherited ViewClienteCadastrar: TViewClienteCadastrar
       Caption = 'Telefone'
     end
     object edtNome_Social: TEdit
-      Left = 171
-      Top = 140
+      Left = 251
+      Top = 139
       Width = 300
       Height = 40
       TabOrder = 1
     end
-    object edtCnpj: TNumberBox
-      Left = 24
-      Top = 140
-      Width = 140
-      Height = 40
-      TabOrder = 0
-    end
     object edtRazao_Social: TEdit
-      Left = 477
-      Top = 140
+      Left = 557
+      Top = 139
       Width = 300
       Height = 40
       TabOrder = 2
-    end
-    object edtTelefone: TNumberBox
-      Left = 477
-      Top = 216
-      Width = 120
-      Height = 40
-      TabOrder = 4
     end
     object edtEndereco: TEdit
       Left = 24
@@ -103,6 +89,30 @@ inherited ViewClienteCadastrar: TViewClienteCadastrar
       DisplayFormat = '000000'
       ReadOnly = True
       TabOrder = 5
+    end
+    object edtCnpj: TMaskEdit
+      Left = 29
+      Top = 139
+      Width = 220
+      Height = 40
+      EditMask = '00.000.000/0000-00;1;_'
+      MaxLength = 18
+      TabOrder = 0
+      Text = '  .   .   /    -  '
+      OnExit = edtCnpjExit
+      OnKeyDown = edtCnpjKeyDown
+    end
+    object edtTelefone: TMaskEdit
+      Left = 477
+      Top = 216
+      Width = 200
+      Height = 40
+      EditMask = '\(00\) 0000-0000'
+      MaxLength = 14
+      TabOrder = 4
+      Text = '(  )     -    '
+      OnExit = edtTelefoneExit
+      OnKeyDown = edtTelefoneKeyDown
     end
   end
   inherited pnBottom: TPanel
@@ -124,6 +134,7 @@ inherited ViewClienteCadastrar: TViewClienteCadastrar
       Margins.Top = 6
       Margins.Right = 6
       Margins.Bottom = 6
+      Caption = 'Cancelar'
       ExplicitLeft = 1283
       ExplicitWidth = 260
       ExplicitHeight = 80
@@ -136,6 +147,7 @@ inherited ViewClienteCadastrar: TViewClienteCadastrar
       Margins.Top = 6
       Margins.Right = 6
       Margins.Bottom = 6
+      Caption = 'Gravar'
       ExplicitLeft = 1023
       ExplicitWidth = 260
       ExplicitHeight = 80

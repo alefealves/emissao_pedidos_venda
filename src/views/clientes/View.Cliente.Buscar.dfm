@@ -1,19 +1,23 @@
 inherited ViewClienteBuscar: TViewClienteBuscar
   Caption = 'Buscar Clientes'
   ClientWidth = 1460
+  ExplicitWidth = 1472
+  ExplicitHeight = 976
   TextHeight = 32
   inherited pnTop: TPanel
     Width = 1460
+    ExplicitWidth = 1440
     inherited edtBuscar: TEdit
-      ExplicitWidth = 1072
+      Width = 972
+      ExplicitWidth = 952
     end
   end
   inherited pnGrid: TPanel
     Width = 1460
     ExplicitWidth = 1440
-    ExplicitHeight = 734
+    ExplicitHeight = 634
     inherited DBGrid1: TDBGrid
-      Height = 734
+      Height = 684
       Columns = <
         item
           Expanded = False
@@ -49,7 +53,7 @@ inherited ViewClienteBuscar: TViewClienteBuscar
   end
   inherited pnBottom: TPanel
     Width = 1460
-    ExplicitTop = 888
+    ExplicitTop = 788
     ExplicitWidth = 1440
     inherited rdGroupFiltros: TRadioGroup
       Columns = 2
@@ -75,7 +79,7 @@ inherited ViewClienteBuscar: TViewClienteBuscar
   end
   inherited pnTotal: TPanel
     Width = 1460
-    ExplicitTop = 848
+    ExplicitTop = 748
     ExplicitWidth = 1440
     inherited lbTotal: TLabel
       Height = 38
@@ -122,7 +126,7 @@ inherited ViewClienteBuscar: TViewClienteBuscar
       FieldName = 'CNPJ'
       Origin = 'CLIENTES.CNPJ'
       Required = True
-      Size = 14
+      Size = 18
     end
     object QListarClientesENDERECO: TIBStringField
       DisplayLabel = 'Endere'#231'o'
@@ -131,10 +135,11 @@ inherited ViewClienteBuscar: TViewClienteBuscar
       Required = True
       Size = 100
     end
-    object QListarClientesTELEFONE: TIntegerField
+    object QListarClientesTELEFONE: TIBStringField
       DisplayLabel = 'Telefone'
       FieldName = 'TELEFONE'
       Origin = 'CLIENTES.TELEFONE'
+      Size = 15
     end
   end
 end

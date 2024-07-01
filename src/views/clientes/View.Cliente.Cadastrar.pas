@@ -4,7 +4,8 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, View.Heranca.Cadastrar, Vcl.StdCtrls, Vcl.Buttons, Vcl.ExtCtrls, Vcl.NumberBox;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, View.Heranca.Cadastrar, Vcl.StdCtrls, Vcl.Buttons, Vcl.ExtCtrls, Vcl.NumberBox,
+  Vcl.Mask;
 
 type
   TViewClienteCadastrar = class(TViewHerancaCadastrar)
@@ -13,18 +14,26 @@ type
     Label1: TLabel;
     Label3: TLabel;
     Label4: TLabel;
-    edtCnpj: TNumberBox;
     edtRazao_Social: TEdit;
     Label5: TLabel;
-    edtTelefone: TNumberBox;
     Label6: TLabel;
     edtEndereco: TEdit;
     edtID: TNumberBox;
+    edtCnpj: TMaskEdit;
+    edtTelefone: TMaskEdit;
     procedure FormShow(Sender: TObject);
     procedure btnGravarClick(Sender: TObject);
+    procedure edtCnpjExit(Sender: TObject);
+    procedure edtTelefoneExit(Sender: TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure edtCnpjKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure edtTelefoneKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
   private
+    EscapePressed: Boolean;
     procedure CarregarCliente;
     function ValidarDados : Boolean;
+    procedure ValidaCNPJ;
+    procedure ValidaTelefone;
   public
     { Public declarations }
   end;
@@ -67,7 +76,7 @@ begin
     edtRazao_Social.Text := Cliente.Razao_Social;
     edtCnpj.Text := Cliente.Cnpj;
     edtEndereco.Text := Cliente.Endereco;
-    edtTelefone.Value := Cliente.Telefone;
+    edtTelefone.Text := Cliente.Telefone;
   finally
     FreeAndNil(Cliente);
     FreeAndNil(ControllerCliente);
@@ -103,9 +112,12 @@ begin
     Cliente.Id := IdRegistroAlterar;
     Cliente.Nome_Fantasia := edtNome_Social.Text;
     Cliente.Razao_Social := edtRazao_Social.Text;
-    Cliente.Cnpj := edtCnpj.Text;
+    Cliente.Cnpj := Trim(edtCnpj.Text);
     Cliente.Endereco := edtEndereco.Text;
-    Cliente.Telefone :=  edtTelefone.ValueInt;
+    if (edtTelefone.Text = '(  )     -    ') then
+        Cliente.Telefone := ''
+    else
+      Cliente.Telefone := edtTelefone.Text;
 
     if not ControllerCliente.Salvar(Cliente,sErro) then
       raise Exception.Create(sErro)
@@ -119,6 +131,57 @@ begin
   end;
 
   inherited;
+end;
+
+procedure TViewClienteCadastrar.ValidaCNPJ;
+begin
+  if not (TUtils.IsCNPJValid(edtCnpj.Text)) then
+     Application.MessageBox('Favor, informe um CNPJ válido.', 'Atenção', MB_OK +
+        MB_ICONWARNING);
+        Exit;
+end;
+
+procedure TViewClienteCadastrar.ValidaTelefone;
+begin
+  if not (TUtils.IsTelefoneValido(edtTelefone.Text)) then
+     Application.MessageBox('Favor, informe um Telefone válido.', 'Atenção', MB_OK +
+        MB_ICONWARNING);
+        Exit;
+
+end;
+
+procedure TViewClienteCadastrar.edtCnpjExit(Sender: TObject);
+begin
+  if not EscapePressed and (Length(Trim(edtCnpj.Text)) > 0) then
+    Self.ValidaCNPJ;
+
+  EscapePressed := False;
+end;
+
+procedure TViewClienteCadastrar.edtCnpjKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+begin
+  if Key = VK_ESCAPE then
+  begin
+    EscapePressed := True;
+    edtCnpj.Text := '';
+  end;
+end;
+
+procedure TViewClienteCadastrar.edtTelefoneExit(Sender: TObject);
+begin
+  if not EscapePressed and (Length(Trim(edtTelefone.Text)) > 0) then
+    Self.ValidaTelefone;
+
+  EscapePressed := False;
+end;
+
+procedure TViewClienteCadastrar.edtTelefoneKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+begin
+  if Key = VK_ESCAPE then
+  begin
+    EscapePressed := True;
+    edtTelefone.Text := '';
+  end;
 end;
 
 function TViewClienteCadastrar.ValidarDados: Boolean;
@@ -162,14 +225,14 @@ begin
       Exit;
     end;
 
-    if (edtTelefone.Value <= 0) then
-    begin
-
-      Application.MessageBox('Favor, informe o Telefone.', 'Atenção', MB_OK +
-        MB_ICONWARNING);
-      edtTelefone.SetFocus;
-      Exit;
-    end;
+//    if (Trim(edtTelefone.Text) = '') then
+//    begin
+//
+//      Application.MessageBox('Favor, informe o Telefone.', 'Atenção', MB_OK +
+//        MB_ICONWARNING);
+//      edtTelefone.SetFocus;
+//      Exit;
+//    end;
 
     Result := True;
   except on E: Exception do
@@ -178,6 +241,25 @@ begin
       Exception.Create(e.Message);
     end;
   end;
+end;
+
+procedure TViewClienteCadastrar.FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+begin
+//  inherited;
+
+//  begin
+//    case(Key)of
+//      VK_F3:
+//      btnGravar.Click;
+//      VK_F4:
+//       begin
+//         if(ssAlt in Shift)then
+//           Key := 0;
+//       end;
+//      VK_ESCAPE:
+//       btnCancelar.Click;
+//    end;
+//  end;
 end;
 
 end.

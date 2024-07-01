@@ -8,7 +8,7 @@ uses
 
 type
   TViewPedidoItemCadastrar = class(TViewHerancaCadastrar)
-    edtID: TNumberBox;
+    edtNum_Item: TNumberBox;
     Label1: TLabel;
     edtId_Pedido: TNumberBox;
     Label2: TLabel;
@@ -34,6 +34,7 @@ type
     function ValidarDados : Boolean;
     procedure DadosProduto;
     procedure CalcularValorTotal;
+    function GetNextItemPedido: Integer;
   public
     property IdPedido: Integer read FIdPedido write FIdPedido;
   end;
@@ -49,6 +50,7 @@ uses
   View.Principal,
   Controller.Pedido_Item,
   Pedido_Item,
+  Controller.Pedido,
   Controller.Produto,
   Produto,
   View.Produto.Buscar,
@@ -61,6 +63,7 @@ begin
     Self.CarregarItem;
 
   edtId_Pedido.Value := IdPedido;
+  edtNum_Item.Value := Self.GetNextItemPedido;
   edtId_Produto.SetFocus;
 end;
 
@@ -76,7 +79,7 @@ begin
   try
     //carrega cabeçalho
     ControllerPedidoItem.CarregarPedidoItem(Pedido_Item, inherited IdRegistroAlterar, IdPedido);
-    edtID.Value := Pedido_Item.Id;
+    edtNum_Item.Value := Pedido_Item.Num_Item;
     //edtId_Pedido.Value := Pedido_Item.Id_Pedido;
     edtId_Produto.Value := Pedido_Item.Id_Produto;
     edtValor_Unitario.Value := Pedido_Item.Quantidade;
@@ -114,6 +117,7 @@ begin
   try
 
     Pedido_Item.Id := IdRegistroAlterar;
+    Pedido_Item.Num_Item := edtNum_Item.ValueInt;
     Pedido_Item.Id_Pedido := edtId_Pedido.ValueInt;
     Pedido_Item.Id_Produto := edtId_Produto.ValueInt;
     Pedido_Item.Valor_Unitario := edtValor_Unitario.ValueCurrency;
@@ -250,5 +254,19 @@ begin
      edtValor_Total.Value := (edtValor_Unitario.Value * edtQuantidade.Value);
   end;
 end;
+
+function TViewPedidoItemCadastrar.GetNextItemPedido: Integer;
+var
+  ControllerPedido: TControllerPedido;
+  sErro: string;
+begin
+  try
+    ControllerPedido := TControllerPedido.Create;
+    result := ControllerPedido.GetNextItemPedido(edtId_Pedido.ValueInt, sErro);
+  finally
+    FreeAndNil(ControllerPedido);
+  end;
+end;
+
 
 end.

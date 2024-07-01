@@ -1,15 +1,22 @@
 inherited ViewPedidoBuscar: TViewPedidoBuscar
   Caption = 'Buscar Pedidos'
+  ClientHeight = 988
   ClientWidth = 1460
+  ExplicitWidth = 1472
   TextHeight = 32
   inherited pnTop: TPanel
     Width = 1460
+    ExplicitWidth = 1440
     inherited edtBuscar: TEdit
-      ExplicitWidth = 1052
+      Width = 972
+      ExplicitWidth = 952
     end
   end
   inherited pnGrid: TPanel
     Width = 1460
+    Height = 734
+    ExplicitWidth = 1440
+    ExplicitHeight = 684
     inherited DBGrid1: TDBGrid
       Height = 734
       Columns = <
@@ -35,23 +42,48 @@ inherited ViewPedidoBuscar: TViewPedidoBuscar
         end
         item
           Expanded = False
+          FieldName = 'STATUS'
+          Visible = True
+        end
+        item
+          Expanded = False
           FieldName = 'DATA'
           Visible = True
         end>
     end
   end
   inherited pnBottom: TPanel
+    Top = 888
     Width = 1460
+    ExplicitTop = 838
+    ExplicitWidth = 1440
     inherited rdGroupFiltros: TRadioGroup
       Columns = 2
       ItemIndex = 1
       Items.Strings = (
         'C'#243'digo (F1)'
         'Nome Cliente (F2)')
+      ExplicitWidth = 710
+    end
+    inherited btnCadastrar: TBitBtn
+      ExplicitLeft = 711
+    end
+    inherited btnUtilizar: TBitBtn
+      ExplicitLeft = 1075
+    end
+    inherited btnFechar: TBitBtn
+      ExplicitLeft = 1257
+      ExplicitTop = 15
+    end
+    inherited btnAlterar: TBitBtn
+      ExplicitLeft = 893
     end
   end
   inherited pnTotal: TPanel
+    Top = 848
     Width = 1460
+    ExplicitTop = 798
+    ExplicitWidth = 1440
     inherited lbTotal: TLabel
       Height = 38
     end
@@ -72,7 +104,8 @@ inherited ViewPedidoBuscar: TViewPedidoBuscar
       'P.ID_CLIENTE,'
       'C.NOME_FANTASIA,'
       'P.VALOR_TOTAL,'
-      'P.DATA '
+      'P.STATUS,'
+      'P.DATA'
       'FROM PEDIDOS P'
       'INNER JOIN CLIENTES C'
       'ON P.ID_CLIENTE = C.ID'
@@ -89,7 +122,7 @@ inherited ViewPedidoBuscar: TViewPedidoBuscar
       DisplayFormat = '000000'
     end
     object QListarPedidosID_CLIENTE: TIntegerField
-      DisplayLabel = 'C'#243'digo Cliente'
+      DisplayLabel = 'C'#243'd. Cliente'
       FieldName = 'ID_CLIENTE'
       Origin = 'PEDIDOS.ID_CLIENTE'
       DisplayFormat = '000000'
@@ -106,15 +139,20 @@ inherited ViewPedidoBuscar: TViewPedidoBuscar
       FieldName = 'VALOR_TOTAL'
       Origin = 'PEDIDOS.VALOR_TOTAL'
       Required = True
-      DisplayFormat = ',,0.00'
+      DisplayFormat = 'R$ ,,0.00'
       Precision = 18
       Size = 2
+    end
+    object QListarPedidosSTATUS: TIBStringField
+      DisplayLabel = 'Status'
+      FieldName = 'STATUS'
+      Origin = 'PEDIDOS.STATUS'
+      Size = 30
     end
     object QListarPedidosDATA: TDateTimeField
       DisplayLabel = 'Data'
       FieldName = 'DATA'
       Origin = 'PEDIDOS.DATA'
-      Required = True
     end
   end
 end

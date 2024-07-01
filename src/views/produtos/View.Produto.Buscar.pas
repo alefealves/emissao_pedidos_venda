@@ -63,7 +63,7 @@ begin
   inherited;
 end;
 
-procedure TViewProdutoBuscar.ChamarTelaCadastrar(const AId: Integer);
+procedure TViewProdutoBuscar.ChamarTelaCadastrar(const AId: Integer = 0);
 var
   ViewProdutoCadastrar: TViewProdutoCadastrar;
 begin
@@ -75,10 +75,10 @@ begin
     if(ViewProdutoCadastrar.ShowModal = mrOk)then
     begin
       inherited UltId := ViewProdutoCadastrar.UltId;
-      Self.BuscarDados;
     end;
   finally
     ViewProdutoCadastrar.Free;
+    Self.BuscarDados;
   end;
 end;
 
@@ -101,6 +101,7 @@ begin
 
   finally
     FreeAndNil(ControllerProduto);
+    Self.BuscarDados;
   end;
 end;
 

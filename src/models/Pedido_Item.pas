@@ -8,6 +8,7 @@ type
   private
 
     FId: Integer;
+    FNum_Item: Integer;
     FId_Pedido: Integer;
     FId_Produto: Integer;
     FQuantidade: Currency;
@@ -15,6 +16,7 @@ type
     FValor_Total: Currency;
 
     procedure SetId(const Value: Integer);
+    procedure SetFNum_Item(const Value: Integer);
     procedure SetId_Pedido(const Value: Integer);
     procedure SetId_Produto(const Value: Integer);
     procedure SetQuantidade(const Value: Currency);
@@ -24,6 +26,7 @@ type
   public
 
     property Id: Integer read FId write SetId;
+    property Num_Item: Integer read FNum_Item write SetFNum_Item;
     property Id_Pedido: Integer read FId_Pedido write SetId_Pedido;
     property Id_Produto: Integer read FId_Produto write SetId_Produto;
     property Quantidade: Currency read FQuantidade write SetQuantidade;
@@ -35,6 +38,11 @@ type
 implementation
 
 { TPedido_Item }
+
+procedure TPedido_Item.SetFNum_Item(const Value: Integer);
+begin
+  FNum_Item := Value;
+end;
 
 procedure TPedido_Item.SetId(const Value: Integer);
 begin

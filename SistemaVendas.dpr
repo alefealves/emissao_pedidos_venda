@@ -24,7 +24,8 @@ uses
   Pedido_Item in 'src\models\Pedido_Item.pas',
   DAO.Pedido_Item in 'src\dao\DAO.Pedido_Item.pas',
   Controller.Pedido_Item in 'src\controllers\Controller.Pedido_Item.pas',
-  View.PedidoItens.Cadastrar in 'src\views\pedidos_itens\View.PedidoItens.Cadastrar.pas' {ViewPedidoItemCadastrar};
+  View.PedidoItens.Cadastrar in 'src\views\pedidos_itens\View.PedidoItens.Cadastrar.pas' {ViewPedidoItemCadastrar},
+  View.Report.Pedido in 'src\views\relatorios\View.Report.Pedido.pas' {ViewReportPedido};
 
 {$R *.res}
 
@@ -32,5 +33,6 @@ begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
   Application.CreateForm(TViewPrincipal, ViewPrincipal);
+  Application.CreateForm(TViewReportPedido, ViewReportPedido);
   Application.Run;
 end.

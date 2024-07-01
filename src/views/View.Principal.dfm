@@ -1,7 +1,7 @@
 object ViewPrincipal: TViewPrincipal
   Left = 0
   Top = 0
-  Caption = 'ViewPrincipal'
+  Caption = 'Sistema Vendas'
   ClientHeight = 1238
   ClientWidth = 1658
   Color = clBtnFace
@@ -52,7 +52,8 @@ object ViewPrincipal: TViewPrincipal
     Align = alClient
     AutoSize = True
     TabOrder = 1
-    ExplicitTop = -5
+    ExplicitWidth = 1638
+    ExplicitHeight = 1163
   end
   object MainMenu1: TMainMenu
     Left = 152
@@ -83,7 +84,6 @@ object ViewPrincipal: TViewPrincipal
     end
   end
   object IBDatabase: TIBDatabase
-    Connected = True
     DatabaseName = 'localhost:C:\Projetos Delphi\sistema_venda\DADOS.fdb'
     Params.Strings = (
       'user_name=SYSDBA'
@@ -97,7 +97,6 @@ object ViewPrincipal: TViewPrincipal
     Top = 64
   end
   object IBTransaction1: TIBTransaction
-    Active = True
     DefaultDatabase = IBDatabase
     Left = 56
     Top = 136

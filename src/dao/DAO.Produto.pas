@@ -9,7 +9,10 @@ uses
   IBX.IBQuery,
   View.Principal,
   Produto,
-  Utils;
+  Utils,
+  IBX.IBErrorCodes,
+  IBX.IBSQL,
+  IBX.IB;
 
 type
   TDAOProduto = class
@@ -60,23 +63,32 @@ var
 begin
 
   try
-    TUtils.CreateQuery(qry);
+    try
+      TUtils.CreateQuery(qry);
 
-    qry.SQL.Add('DELETE FROM PRODUTOS ');
-    qry.SQL.Add('WHERE ID = :ID');
+      qry.SQL.Add('DELETE FROM PRODUTOS ');
+      qry.SQL.Add('WHERE ID = :ID');
+      qry.ParamByName('ID').AsInteger := AIdProduto;
 
-    qry.ParamByName('ID').AsInteger := AIdProduto;
-
-    qry.ExecSQL();
-
-    TUtils.DestroyQuery(qry);
-    Result := True;
-  except on E: Exception do
-    begin
-      TUtils.DestroyQuery(qry);
-      Result := False;
-      sErro := 'Ocorreu um erro ao excluir o produto: ' + sLineBreak + E.Message;
+      qry.ExecSQL();
+      qry.Transaction.Commit;
+      Result := True;
+    except
+      on E: EIBInterBaseError do
+      begin
+        sErro := TUtils.TratarExcecaoBD(E);
+        qry.Transaction.Rollback;
+        Result := False;
+      end;
+      on E: Exception do
+      begin
+        sErro := 'Ocorreu um erro ao salvar o produto: ' + sLineBreak + E.Message;
+        qry.Transaction.Rollback;
+        Result := False;
+      end;
     end;
+  finally
+    TUtils.DestroyQuery(qry);
   end;
 end;
 
@@ -86,46 +98,57 @@ var
 begin
 
   try
-    TUtils.CreateQuery(qry);
+    try
+      TUtils.CreateQuery(qry);
 
-    if (oProduto.Id = 0) then
-    begin
-      qry.SQL.Add('INSERT INTO PRODUTOS ');
-      qry.SQL.Add('(DESCRICAO ');
-      qry.SQL.Add(',MARCA ');
-      qry.SQL.Add(',PRECO) ');
-      qry.SQL.Add('VALUES(:DESCRICAO ');
-      qry.SQL.Add(',:MARCA ');
-      qry.SQL.Add(',:PRECO)');
+      if (oProduto.Id = 0) then
+      begin
+        qry.SQL.Add('INSERT INTO PRODUTOS ');
+        qry.SQL.Add('(DESCRICAO ');
+        qry.SQL.Add(',MARCA ');
+        qry.SQL.Add(',PRECO) ');
+        qry.SQL.Add('VALUES(:DESCRICAO ');
+        qry.SQL.Add(',:MARCA ');
+        qry.SQL.Add(',:PRECO)');
 
-      qry.ParamByName('DESCRICAO').AsString := oProduto.Descricao;
-      qry.ParamByName('MARCA').AsString := oProduto.Marca;
-      qry.ParamByName('PRECO').AsCurrency := oProduto.Preco;
-    end
-    else
-    begin
-      qry.SQL.Add('UPDATE PRODUTOS ');
-      qry.SQL.Add('SET DESCRICAO = :DESCRICAO ');
-      qry.SQL.Add(',MARCA = :MARCA ');
-      qry.SQL.Add(',PRECO = :PRECO ');
-      qry.SQL.Add('WHERE ID = :ID');
+        qry.ParamByName('DESCRICAO').AsString := oProduto.Descricao;
+        qry.ParamByName('MARCA').AsString := oProduto.Marca;
+        qry.ParamByName('PRECO').AsCurrency := oProduto.Preco;
+      end
+      else
+      begin
+        qry.SQL.Add('UPDATE PRODUTOS ');
+        qry.SQL.Add('SET DESCRICAO = :DESCRICAO ');
+        qry.SQL.Add(',MARCA = :MARCA ');
+        qry.SQL.Add(',PRECO = :PRECO ');
+        qry.SQL.Add('WHERE ID = :ID');
 
-      qry.ParamByName('DESCRICAO').AsString := oProduto.Descricao;
-      qry.ParamByName('MARCA').AsString := oProduto.Marca;
-      qry.ParamByName('PRECO').AsCurrency := oProduto.Preco;
+        qry.ParamByName('DESCRICAO').AsString := oProduto.Descricao;
+        qry.ParamByName('MARCA').AsString := oProduto.Marca;
+        qry.ParamByName('PRECO').AsCurrency := oProduto.Preco;
 
-      qry.ParamByName('ID').AsInteger := oProduto.Id;
+        qry.ParamByName('ID').AsInteger := oProduto.Id;
+      end;
+
+      qry.ExecSQL();
+      qry.Transaction.Commit;
+      Result := True;
+    except
+      on E: EIBInterBaseError do
+      begin
+        sErro := TUtils.TratarExcecaoBD(E);
+        qry.Transaction.Rollback;
+        Result := False;
+      end;
+      on E: Exception do
+      begin
+        sErro := 'Ocorreu um erro ao salvar o produto: ' + sLineBreak + E.Message;
+        qry.Transaction.Rollback;
+        Result := False;
+      end;
     end;
-
-    qry.ExecSQL();
-    Result := True;
+  finally
     TUtils.DestroyQuery(qry);
-  except on E: Exception do
-    begin
-      TUtils.DestroyQuery(qry);
-      Result := False;
-      sErro := 'Ocorreu um erro ao salvar o produto: ' + sLineBreak + E.Message;
-    end;
   end;
 end;
 

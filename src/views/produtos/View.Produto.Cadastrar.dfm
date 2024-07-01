@@ -4,8 +4,6 @@ inherited ViewProdutoCadastrar: TViewProdutoCadastrar
   ClientWidth = 1564
   Font.Height = -24
   OnShow = FormShow
-  ExplicitLeft = 5
-  ExplicitTop = 5
   ExplicitWidth = 1576
   ExplicitHeight = 644
   TextHeight = 32
@@ -16,8 +14,8 @@ inherited ViewProdutoCadastrar: TViewProdutoCadastrar
     Margins.Top = 6
     Margins.Right = 6
     Margins.Bottom = 6
-    ExplicitWidth = 1564
-    ExplicitHeight = 524
+    ExplicitWidth = 1544
+    ExplicitHeight = 474
     object Label1: TLabel
       Left = 24
       Top = 25
@@ -55,21 +53,22 @@ inherited ViewProdutoCadastrar: TViewProdutoCadastrar
       Color = clBtnFace
       DisplayFormat = '000000'
       ReadOnly = True
-      TabOrder = 0
+      TabOrder = 3
     end
     object edtDescricao: TEdit
       Left = 123
       Top = 63
       Width = 400
       Height = 40
-      TabOrder = 1
+      TabOrder = 0
     end
     object edtPreco: TNumberBox
       Left = 197
       Top = 156
       Width = 120
       Height = 40
-      DisplayFormat = ',,0.00'
+      DisplayFormat = 'R$ ,,0.00'
+      Mode = nbmCurrency
       TabOrder = 2
     end
     object edtMarca: TEdit
@@ -77,7 +76,7 @@ inherited ViewProdutoCadastrar: TViewProdutoCadastrar
       Top = 156
       Width = 160
       Height = 40
-      TabOrder = 3
+      TabOrder = 1
     end
   end
   inherited pnBottom: TPanel
@@ -88,8 +87,8 @@ inherited ViewProdutoCadastrar: TViewProdutoCadastrar
     Margins.Top = 6
     Margins.Right = 6
     Margins.Bottom = 6
-    ExplicitTop = 524
-    ExplicitWidth = 1564
+    ExplicitTop = 474
+    ExplicitWidth = 1544
     ExplicitHeight = 82
     inherited btnCancelar: TBitBtn
       Left = 1303
@@ -99,10 +98,9 @@ inherited ViewProdutoCadastrar: TViewProdutoCadastrar
       Margins.Top = 6
       Margins.Right = 6
       Margins.Bottom = 6
-      ExplicitLeft = 1302
-      ExplicitTop = 2
+      ExplicitLeft = 1283
       ExplicitWidth = 260
-      ExplicitHeight = 78
+      ExplicitHeight = 80
     end
     inherited btnGravar: TBitBtn
       Left = 1043
@@ -112,10 +110,9 @@ inherited ViewProdutoCadastrar: TViewProdutoCadastrar
       Margins.Top = 6
       Margins.Right = 6
       Margins.Bottom = 6
-      ExplicitLeft = 1042
-      ExplicitTop = 2
+      ExplicitLeft = 1023
       ExplicitWidth = 260
-      ExplicitHeight = 78
+      ExplicitHeight = 80
     end
   end
 end

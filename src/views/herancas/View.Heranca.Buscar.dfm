@@ -3,8 +3,8 @@ object ViewHerancaBuscar: TViewHerancaBuscar
   Top = 0
   BorderIcons = [biSystemMenu, biMaximize]
   Caption = 'Buscar Base'
-  ClientHeight = 1038
-  ClientWidth = 1460
+  ClientHeight = 988
+  ClientWidth = 1440
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -19,7 +19,7 @@ object ViewHerancaBuscar: TViewHerancaBuscar
   object pnTop: TPanel
     Left = 0
     Top = 0
-    Width = 1460
+    Width = 1440
     Height = 114
     Margins.Left = 6
     Margins.Top = 6
@@ -30,9 +30,8 @@ object ViewHerancaBuscar: TViewHerancaBuscar
     BevelKind = bkTile
     BevelOuter = bvNone
     TabOrder = 0
-    ExplicitWidth = 1436
     DesignSize = (
-      1456
+      1436
       112)
     object Label1: TLabel
       Left = 32
@@ -50,7 +49,7 @@ object ViewHerancaBuscar: TViewHerancaBuscar
     object edtBuscar: TEdit
       Left = 32
       Top = 56
-      Width = 1092
+      Width = 1052
       Height = 40
       Margins.Left = 6
       Margins.Top = 6
@@ -67,8 +66,8 @@ object ViewHerancaBuscar: TViewHerancaBuscar
   object pnGrid: TPanel
     Left = 0
     Top = 114
-    Width = 1460
-    Height = 784
+    Width = 1440
+    Height = 734
     Margins.Left = 6
     Margins.Top = 6
     Margins.Right = 6
@@ -105,8 +104,8 @@ object ViewHerancaBuscar: TViewHerancaBuscar
   end
   object pnBottom: TPanel
     Left = 0
-    Top = 938
-    Width = 1460
+    Top = 888
+    Width = 1440
     Height = 100
     Margins.Left = 6
     Margins.Top = 6
@@ -418,8 +417,8 @@ object ViewHerancaBuscar: TViewHerancaBuscar
   end
   object pnTotal: TPanel
     Left = 0
-    Top = 898
-    Width = 1460
+    Top = 848
+    Width = 1440
     Height = 40
     Margins.Left = 6
     Margins.Top = 6
@@ -434,7 +433,7 @@ object ViewHerancaBuscar: TViewHerancaBuscar
       Left = 1138
       Top = 1
       Width = 301
-      Height = 38
+      Height = 32
       Margins.Left = 0
       Margins.Top = 0
       Margins.Right = 20
@@ -442,7 +441,6 @@ object ViewHerancaBuscar: TViewHerancaBuscar
       Align = alRight
       Caption = 'Registros Localizados: 00000'
       Layout = tlCenter
-      ExplicitHeight = 32
     end
   end
   object PopupMenu1: TPopupMenu

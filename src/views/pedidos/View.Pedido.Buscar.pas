@@ -15,6 +15,8 @@ type
     QListarPedidosNOME_FANTASIA: TIBStringField;
     QListarPedidosVALOR_TOTAL: TIBBCDField;
     QListarPedidosDATA: TDateTimeField;
+    QListarPedidosSTATUS: TIBStringField;
+    procedure Excluir1Click(Sender: TObject);
   private
   protected
     procedure BuscarDados; override;
@@ -76,10 +78,10 @@ begin
     if(ViewPedidoCadastrar.ShowModal = mrOk)then
     begin
       inherited UltId := ViewPedidoCadastrar.UltId;
-      Self.BuscarDados;
     end;
   finally
     ViewPedidoCadastrar.Free;
+    Self.BuscarDados;
   end;
 end;
 
@@ -87,22 +89,56 @@ procedure TViewPedidoBuscar.Excluir;
 var
   ControllerPedido: TControllerPedido;
   sErro: string;
+  excluir: boolean;
 begin
+  //inherited;
 
-  inherited;
+  if(DataSource1.DataSet.IsEmpty)then
+    raise Exception.Create('Selecione um registro');
 
-  ControllerPedido := TControllerPedido.Create;
-  try
-
-    if not ControllerPedido.Excluir(IdSelecionado,sErro) then
-      raise Exception.Create(sErro)
+  excluir := false;
+  if (DataSource1.DataSet.FieldByName('STATUS').AsString = 'AGUARDANDO APROVAÇÃO') then begin
+    if(Application.MessageBox('O pedido está AGUARDANDO APROVACAO, deseja realmente excluir?', 'Confirmação',
+      MB_YESNO + MB_ICONQUESTION + MB_DEFBUTTON2) <> IDYES)
+    then
+      Exit
     else
-      Application.MessageBox('Registro excluído com sucesso', 'Atenção', MB_OK +
-        MB_ICONWARNING);
-
-  finally
-    FreeAndNil(ControllerPedido);
+      excluir := true;
+  end
+  else begin
+    if (Application.MessageBox(
+      'Confirma a exclusão deste registro?',
+      'Confirma exclusão?',
+      MB_YESNO + MB_ICONQUESTION + MB_DEFBUTTON2) <> IDYES)
+    then
+      Exit
+    else
+      excluir := true;
   end;
+
+  if (excluir) then begin
+
+    IdSelecionado := DataSource1.DataSet.FieldByName('ID').AsInteger;
+    ControllerPedido := TControllerPedido.Create;
+    try
+
+      if not ControllerPedido.Excluir(IdSelecionado,sErro) then
+        raise Exception.Create(sErro)
+      else
+        Application.MessageBox('Registro excluído com sucesso', 'Atenção', MB_OK +
+          MB_ICONWARNING);
+
+    finally
+      FreeAndNil(ControllerPedido);
+      Self.BuscarDados;
+    end;
+  end;
+end;
+
+procedure TViewPedidoBuscar.Excluir1Click(Sender: TObject);
+begin
+  //inherited;
+  Self.Excluir;
 end;
 
 end.

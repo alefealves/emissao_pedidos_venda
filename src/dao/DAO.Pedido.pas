@@ -9,7 +9,10 @@ uses
   IBX.IBQuery,
   View.Principal,
   Pedido,
-  Utils;
+  Utils,
+  IBX.IBErrorCodes,
+  IBX.IBSQL,
+  IBX.IB;
 
 type
   TDAOPedido = class
@@ -20,8 +23,10 @@ type
     procedure CarregarPedido(oPedido: TPedido; AIdPedido: integer);
     function Salvar(oPedido: TPedido; out sErro: string): Boolean;
     function Excluir(AIdPedido: Integer; out sErro: string): Boolean;
-    function LookProduto(oPedido: TPedido; AIdPedido: Integer; out sErro: string): Boolean;
+    function LookPedido(oPedido: TPedido; AIdPedido: Integer; out sErro: string): Boolean;
     function SomaTotalPedido(AIdPedido: Integer; out sErro: string): Currency;
+    function GetNextItemPedido(AIdPedido: Integer; out sErro: string): Integer;
+    function AlterarStatus(AIdPedido: Integer; novoStatus: string; out sErro: string): Boolean;
   end;
 
 implementation
@@ -48,6 +53,7 @@ begin
       oPedido.Id_Cliente := qry.FieldByName('ID_CLIENTE').AsInteger;
       oPedido.Valor_Total := qry.FieldByName('VALOR_TOTAL').AsCurrency;
       oPedido.Data := qry.FieldByName('DATA').AsDateTime;
+      oPedido.Status := qry.FieldByName('STATUS').AsString;
     end;
 
   finally
@@ -61,23 +67,32 @@ var
 begin
 
   try
-    TUtils.CreateQuery(qry);
+    try
+      TUtils.CreateQuery(qry);
 
-    qry.SQL.Add('DELETE FROM PEDIDOS ');
-    qry.SQL.Add('WHERE ID = :ID');
+      qry.SQL.Add('DELETE FROM PEDIDOS ');
+      qry.SQL.Add('WHERE ID = :ID');
 
-    qry.ParamByName('ID').AsInteger := AIdPedido;
-
-    qry.ExecSQL();
-
-    TUtils.DestroyQuery(qry);
-    Result := True;
-  except on E: Exception do
-    begin
-      TUtils.DestroyQuery(qry);
-      Result := False;
-      sErro := 'Ocorreu um erro ao excluir o pedido: ' + sLineBreak + E.Message;
+      qry.ParamByName('ID').AsInteger := AIdPedido;
+      qry.ExecSQL();
+      qry.Transaction.Commit;
+      Result := True;
+    except
+      on E: EIBInterBaseError do
+      begin
+        sErro := TUtils.TratarExcecaoBD(E);
+        qry.Transaction.Rollback;
+        Result := False;
+      end;
+      on E: Exception do
+      begin
+        sErro := 'Ocorreu um erro ao excluir o pedido: ' + sLineBreak + E.Message;
+        qry.Transaction.Rollback;
+        Result := False;
+      end;
     end;
+  finally
+    TUtils.DestroyQuery(qry);
   end;
 end;
 
@@ -87,41 +102,54 @@ var
 begin
 
   try
-    TUtils.CreateQuery(qry);
+    try
+      TUtils.CreateQuery(qry);
 
-    if (oPedido.Id = 0) then
-    begin
-      qry.SQL.Add('INSERT INTO PEDIDOS ');
-      qry.SQL.Add('(ID_CLIENTE ');
-      qry.SQL.Add(',VALOR_TOTAL) ');
-      qry.SQL.Add('VALUES(:ID_CLIENTE ');
-      qry.SQL.Add(',:VALOR_TOTAL)');
+      if (oPedido.Id = 0) then
+      begin
+        qry.SQL.Add('INSERT INTO PEDIDOS ');
+        qry.SQL.Add('(ID_CLIENTE ');
+        qry.SQL.Add(',VALOR_TOTAL) ');
+        qry.SQL.Add('VALUES(:ID_CLIENTE ');
+        qry.SQL.Add(',:VALOR_TOTAL)');
 
-      qry.ParamByName('ID_CLIENTE').AsInteger := oPedido.Id_Cliente;
-      qry.ParamByName('VALOR_TOTAL').AsCurrency := oPedido.Valor_Total;
-    end
-    else
-    begin
-      qry.SQL.Add('UPDATE PEDIDOS ');
-      qry.SQL.Add('SET ID_CLIENTE = :ID_CLIENTE ');
-      qry.SQL.Add(',VALOR_TOTAL = :VALOR_TOTAL ');
-      qry.SQL.Add('WHERE ID = :ID');
+        qry.ParamByName('ID_CLIENTE').AsInteger := oPedido.Id_Cliente;
+        qry.ParamByName('VALOR_TOTAL').AsCurrency := oPedido.Valor_Total;
+      end
+      else
+      begin
+        qry.SQL.Add('UPDATE PEDIDOS ');
+        qry.SQL.Add('SET ID_CLIENTE = :ID_CLIENTE ');
+        qry.SQL.Add(',VALOR_TOTAL = :VALOR_TOTAL ');
+        qry.SQL.Add(',STATUS = :STATUS ');
+        qry.SQL.Add('WHERE ID = :ID');
 
-      qry.ParamByName('ID_CLIENTE').AsInteger := oPedido.Id_Cliente;
-      qry.ParamByName('VALOR_TOTAL').AsCurrency := oPedido.Valor_Total;
+        qry.ParamByName('ID_CLIENTE').AsInteger := oPedido.Id_Cliente;
+        qry.ParamByName('VALOR_TOTAL').AsCurrency := oPedido.Valor_Total;
+        qry.ParamByName('STATUS').AsString := oPedido.Status;
 
-      qry.ParamByName('ID').AsInteger := oPedido.Id;
+        qry.ParamByName('ID').AsInteger := oPedido.Id;
+      end;
+
+      qry.ExecSQL();
+      qry.Transaction.Commit;
+      Result := True;
+    except
+      on E: EIBInterBaseError do
+        begin
+          sErro := TUtils.TratarExcecaoBD(E);
+          qry.Transaction.Rollback;
+          Result := False;
+        end;
+        on E: Exception do
+        begin
+          sErro := 'Ocorreu um erro ao salvar o pedido: ' + sLineBreak + E.Message;
+          qry.Transaction.Rollback;
+          Result := False;
+        end;
     end;
-
-    qry.ExecSQL();
-    Result := True;
+  finally
     TUtils.DestroyQuery(qry);
-  except on E: Exception do
-    begin
-      TUtils.DestroyQuery(qry);
-      Result := False;
-      sErro := 'Ocorreu um erro ao salvar o pedido: ' + sLineBreak + E.Message;
-    end;
   end;
 end;
 
@@ -138,6 +166,7 @@ begin
     qry.SQL.Add('P.ID_CLIENTE, ');
     qry.SQL.Add('C.NOME_FANTASIA, ');
     qry.SQL.Add('P.VALOR_TOTAL, ');
+    qry.SQL.Add('P.STATUS, ');
     qry.SQL.Add('P.DATA ');
     qry.SQL.Add('FROM PEDIDOS P ');
     qry.SQL.Add('INNER JOIN CLIENTES C ');
@@ -161,7 +190,7 @@ begin
   end;
 end;
 
-function TDAOPedido.LookProduto(oPedido: TPedido; AIdPedido: Integer; out sErro: string): Boolean;
+function TDAOPedido.LookPedido(oPedido: TPedido; AIdPedido: Integer; out sErro: string): Boolean;
 var
   qry: TIBQuery;
 begin
@@ -181,6 +210,7 @@ begin
       oPedido.Id_Cliente := qry.FieldByName('ID_CLIENTE').AsInteger;
       oPedido.Valor_Total := qry.FieldByName('VALOR_TOTAL').AsCurrency;
       oPedido.Data := qry.FieldByName('DATA').AsDateTime;
+      oPedido.Status := qry.FieldByName('STATUS').AsString;
     end
     else
       oPedido.Id := 0;
@@ -221,6 +251,64 @@ begin
       TUtils.DestroyQuery(qry);
       result := 0;
       sErro := 'Ocorreu um erro ao somar o total do pedido: ' + sLineBreak + E.Message;
+    end;
+  end;
+end;
+
+function TDAOPedido.GetNextItemPedido(AIdPedido: Integer; out sErro: string): Integer;
+var
+  qry: TIBQuery;
+begin
+
+  try
+    TUtils.CreateQuery(qry);
+
+    qry.SQL.Add('SELECT COUNT(PI.ID)+1 NEXT_ITEM ');
+    qry.SQL.Add('FROM PEDIDOS_ITENS PI ');
+    qry.SQL.Add('WHERE PI.ID_PEDIDO = :ID_PEDIDO');
+    qry.ParamByName('ID_PEDIDO').AsInteger := AIdPedido;
+
+    qry.Open();
+
+    if not (qry.IsEmpty)then
+      result := qry.FieldByName('NEXT_ITEM').AsInteger
+    else
+      result := 1;
+
+    TUtils.DestroyQuery(qry);
+  except on E: Exception do
+    begin
+      TUtils.DestroyQuery(qry);
+      result := 0;
+      sErro := 'Ocorreu um erro ao buscar o próximo num item do pedido: ' + sLineBreak + E.Message;
+    end;
+  end;
+end;
+
+function TDAOPedido.AlterarStatus(AIdPedido: Integer; novoStatus: string; out sErro: string): Boolean;
+var
+  qry: TIBQuery;
+begin
+
+  try
+    TUtils.CreateQuery(qry);
+
+    qry.SQL.Add('UPDATE PEDIDOS SET ');
+    qry.SQL.Add('STATUS = :STATUS ');
+    qry.SQL.Add('WHERE ID = :ID_PEDIDO');
+    qry.ParamByName('ID_PEDIDO').AsInteger := AIdPedido;
+    qry.ParamByName('STATUS').AsString := novoStatus;
+
+    qry.ExecSQL();
+    qry.Transaction.Commit;
+    result := true;
+    TUtils.DestroyQuery(qry);
+  except on E: Exception do
+    begin
+      qry.Transaction.Rollback;
+      TUtils.DestroyQuery(qry);
+      result := false;
+      sErro := 'Ocorreu um erro ao atualizar o status do pedido: ' + sLineBreak + E.Message;
     end;
   end;
 end;

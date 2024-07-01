@@ -1,21 +1,22 @@
 inherited ViewProdutoBuscar: TViewProdutoBuscar
   Caption = 'Buscar Produtos'
-  ExplicitWidth = 1452
-  ExplicitHeight = 1026
+  ClientWidth = 1440
   TextHeight = 32
   inherited pnTop: TPanel
+    Width = 1440
     ExplicitWidth = 1420
     inherited edtBuscar: TEdit
-      Width = 972
-      ExplicitWidth = 952
+      Width = 832
+      ExplicitWidth = 812
     end
   end
   inherited pnGrid: TPanel
+    Width = 1440
     ExplicitWidth = 1420
     ExplicitHeight = 684
     inherited DBGrid1: TDBGrid
       Width = 1440
-      Height = 734
+      Height = 684
       Columns = <
         item
           Expanded = False
@@ -40,6 +41,7 @@ inherited ViewProdutoBuscar: TViewProdutoBuscar
     end
   end
   inherited pnBottom: TPanel
+    Width = 1440
     ExplicitTop = 838
     ExplicitWidth = 1420
     inherited rdGroupFiltros: TRadioGroup
@@ -70,6 +72,7 @@ inherited ViewProdutoBuscar: TViewProdutoBuscar
     end
   end
   inherited pnTotal: TPanel
+    Width = 1440
     ExplicitTop = 798
     ExplicitWidth = 1420
     inherited lbTotal: TLabel
@@ -89,14 +92,18 @@ inherited ViewProdutoBuscar: TViewProdutoBuscar
     CachedUpdates = False
     ParamCheck = False
     SQL.Strings = (
-      'SELECT * FROM PRODUTOS ORDER BY 1')
+      'SELECT '
+      '*'
+      'FROM PRODUTOS'
+      'ORDER BY 1'
+      '')
     PrecommittedReads = False
     Left = 64
     Top = 282
     object QListarProdutosID: TIntegerField
       DisplayLabel = 'C'#243'digo'
       FieldName = 'ID'
-      Origin = 'CLIENTES.ID'
+      Origin = 'PRODUTOS.ID'
       ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
       Required = True
       DisplayFormat = '000000'
@@ -120,7 +127,7 @@ inherited ViewProdutoBuscar: TViewProdutoBuscar
       FieldName = 'PRECO'
       Origin = 'PRODUTOS.PRECO'
       Required = True
-      DisplayFormat = ',,0.00'
+      DisplayFormat = 'R$ ,,0.00'
       Precision = 18
       Size = 2
     end

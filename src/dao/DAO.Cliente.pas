@@ -9,7 +9,10 @@ uses
   IBX.IBQuery,
   View.Principal,
   Cliente,
-  Utils;
+  Utils,
+  IBX.IBErrorCodes,
+  IBX.IBSQL,
+  IBX.IB;
 
 type
   TDAOCliente = class
@@ -48,7 +51,7 @@ begin
       oCliente.Razao_Social := qry.FieldByName('RAZAO_SOCIAL').AsString;
       oCliente.Cnpj := qry.FieldByName('CNPJ').AsString;
       oCliente.Endereco := qry.FieldByName('ENDERECO').AsString;
-      oCliente.Telefone := qry.FieldByName('TELEFONE').AsInteger;
+      oCliente.Telefone := qry.FieldByName('TELEFONE').AsString;
     end;
 
   finally
@@ -62,23 +65,32 @@ var
 begin
 
   try
-    TUtils.CreateQuery(qry);
+    try
+      TUtils.CreateQuery(qry);
 
-    qry.SQL.Add('DELETE FROM CLIENTES ');
-    qry.SQL.Add('WHERE ID = :ID');
+      qry.SQL.Add('DELETE FROM CLIENTES ');
+      qry.SQL.Add('WHERE ID = :ID');
+      qry.ParamByName('ID').AsInteger := AIdCliente;
 
-    qry.ParamByName('ID').AsInteger := AIdCliente;
-
-    qry.ExecSQL();
-
-    TUtils.DestroyQuery(qry);
-    Result := True;
-  except on E: Exception do
-    begin
-      TUtils.DestroyQuery(qry);
-      Result := False;
-      sErro := 'Ocorreu um erro ao excluir o cliente: ' + sLineBreak + E.Message;
+      qry.ExecSQL();
+      qry.Transaction.Commit;
+      Result := True;
+    except
+      on E: EIBInterBaseError do
+      begin
+        sErro := TUtils.TratarExcecaoBD(E);
+        qry.Transaction.Rollback;
+        Result := False;
+      end;
+      on E: Exception do
+      begin
+        sErro := 'Ocorreu um erro ao excluir o cliente: ' + sLineBreak + E.Message;
+        qry.Transaction.Rollback;
+        Result := False;
+      end;
     end;
+  finally
+    TUtils.DestroyQuery(qry);
   end;
 end;
 
@@ -88,56 +100,67 @@ var
 begin
 
   try
-    TUtils.CreateQuery(qry);
+    try
+      TUtils.CreateQuery(qry);
 
-    if (oCliente.Id = 0) then
-    begin
-      qry.SQL.Add('INSERT INTO CLIENTES ');
-      qry.SQL.Add('(NOME_FANTASIA ');
-      qry.SQL.Add(',RAZAO_SOCIAL ');
-      qry.SQL.Add(',CNPJ ');
-      qry.SQL.Add(',ENDERECO ');
-      qry.SQL.Add(',TELEFONE) ');
-      qry.SQL.Add('VALUES(:NOME_FANTASIA ');
-      qry.SQL.Add(',:RAZAO_SOCIAL ');
-      qry.SQL.Add(',:CNPJ ');
-      qry.SQL.Add(',:ENDERECO ');
-      qry.SQL.Add(',:TELEFONE)');
+      if (oCliente.Id = 0) then
+      begin
+        qry.SQL.Add('INSERT INTO CLIENTES ');
+        qry.SQL.Add('(NOME_FANTASIA ');
+        qry.SQL.Add(',RAZAO_SOCIAL ');
+        qry.SQL.Add(',CNPJ ');
+        qry.SQL.Add(',ENDERECO ');
+        qry.SQL.Add(',TELEFONE) ');
+        qry.SQL.Add('VALUES(:NOME_FANTASIA ');
+        qry.SQL.Add(',:RAZAO_SOCIAL ');
+        qry.SQL.Add(',:CNPJ ');
+        qry.SQL.Add(',:ENDERECO ');
+        qry.SQL.Add(',:TELEFONE)');
 
-      qry.ParamByName('NOME_FANTASIA').AsString := oCliente.Nome_Fantasia;
-      qry.ParamByName('RAZAO_SOCIAL').AsString := oCliente.Razao_Social;
-      qry.ParamByName('CNPJ').AsString := oCliente.Cnpj;
-      qry.ParamByName('ENDERECO').AsString := oCliente.Endereco;
-      qry.ParamByName('TELEFONE').AsInteger := oCliente.Telefone;
-    end
-    else
-    begin
-      qry.SQL.Add('UPDATE CLIENTES ');
-      qry.SQL.Add('SET NOME_FANTASIA = :NOME_FANTASIA ');
-      qry.SQL.Add(',RAZAO_SOCIAL = :RAZAO_SOCIAL ');
-      qry.SQL.Add(',CNPJ = :CNPJ ');
-      qry.SQL.Add(',ENDERECO = :ENDERECO ');
-      qry.SQL.Add(',TELEFONE = :TELEFONE ');
-      qry.SQL.Add('WHERE ID = :ID');
+        qry.ParamByName('NOME_FANTASIA').AsString := oCliente.Nome_Fantasia;
+        qry.ParamByName('RAZAO_SOCIAL').AsString := oCliente.Razao_Social;
+        qry.ParamByName('CNPJ').AsString := oCliente.Cnpj;
+        qry.ParamByName('ENDERECO').AsString := oCliente.Endereco;
+        qry.ParamByName('TELEFONE').AsString := oCliente.Telefone;
+      end
+      else
+      begin
+        qry.SQL.Add('UPDATE CLIENTES ');
+        qry.SQL.Add('SET NOME_FANTASIA = :NOME_FANTASIA ');
+        qry.SQL.Add(',RAZAO_SOCIAL = :RAZAO_SOCIAL ');
+        qry.SQL.Add(',CNPJ = :CNPJ ');
+        qry.SQL.Add(',ENDERECO = :ENDERECO ');
+        qry.SQL.Add(',TELEFONE = :TELEFONE ');
+        qry.SQL.Add('WHERE ID = :ID');
 
-      qry.ParamByName('NOME_FANTASIA').AsString := oCliente.Nome_Fantasia;
-      qry.ParamByName('RAZAO_SOCIAL').AsString := oCliente.Razao_Social;
-      qry.ParamByName('CNPJ').AsString := oCliente.Cnpj;
-      qry.ParamByName('ENDERECO').AsString := oCliente.Endereco;
-      qry.ParamByName('TELEFONE').AsInteger := oCliente.Telefone;
+        qry.ParamByName('NOME_FANTASIA').AsString := oCliente.Nome_Fantasia;
+        qry.ParamByName('RAZAO_SOCIAL').AsString := oCliente.Razao_Social;
+        qry.ParamByName('CNPJ').AsString := oCliente.Cnpj;
+        qry.ParamByName('ENDERECO').AsString := oCliente.Endereco;
+        qry.ParamByName('TELEFONE').AsString := oCliente.Telefone;
 
-      qry.ParamByName('ID').AsInteger := oCliente.Id;
+        qry.ParamByName('ID').AsInteger := oCliente.Id;
+      end;
+
+      qry.ExecSQL();
+      qry.Transaction.Commit;
+      Result := True;
+    except
+      on E: EIBInterBaseError do
+        begin
+          sErro := TUtils.TratarExcecaoBD(E);
+          qry.Transaction.Rollback;
+          Result := False;
+        end;
+        on E: Exception do
+        begin
+          sErro := 'Ocorreu um erro ao salvar o cliente: ' + sLineBreak + E.Message;
+          qry.Transaction.Rollback;
+          Result := False;
+        end;
     end;
-
-    qry.ExecSQL();
-    Result := True;
+  finally
     TUtils.DestroyQuery(qry);
-  except on E: Exception do
-    begin
-      TUtils.DestroyQuery(qry);
-      Result := False;
-      sErro := 'Ocorreu um erro ao salvar o cliente: ' + sLineBreak + E.Message;
-    end;
   end;
 end;
 
@@ -191,7 +214,7 @@ begin
       oCliente.Razao_Social := qry.FieldByName('RAZAO_SOCIAL').AsString;
       oCliente.Cnpj := qry.FieldByName('CNPJ').AsString;
       oCliente.Endereco := qry.FieldByName('ENDERECO').AsString;
-      oCliente.Telefone := qry.FieldByName('TELEFONE').AsInteger;
+      oCliente.Telefone := qry.FieldByName('TELEFONE').AsString;
     end
     else
       oCliente.Id := 0;

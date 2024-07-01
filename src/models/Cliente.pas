@@ -12,14 +12,14 @@ type
     FRazao_Social: string;
     FCnpj: string;
     FEndereco: string;
-    FTelefone: Integer;
+    FTelefone: string;
 
     procedure SetId(const Value: Integer);
     procedure SetNome_Fantasia(const Value: String);
     procedure SetRazao_Social(const Value: String);
     procedure SetCnpj(const Value: String);
     procedure SetEndereco(const Value: String);
-    procedure SetTelefone(const Value: Integer);
+    procedure SetTelefone(const Value: String);
 
   public
 
@@ -28,7 +28,7 @@ type
     property Razao_Social: String read FRazao_Social write SetRazao_Social;
     property Cnpj: String read FCnpj write SetCnpj;
     property Endereco: String read FEndereco write SetEndereco;
-    property Telefone: Integer read FTelefone write SetTelefone;
+    property Telefone: String read FTelefone write SetTelefone;
 
   end;
 
@@ -62,7 +62,7 @@ begin
   FRazao_Social := Value;
 end;
 
-procedure TCliente.SetTelefone(const Value: Integer);
+procedure TCliente.SetTelefone(const Value: String);
 begin
   FTelefone := Value;
 end;

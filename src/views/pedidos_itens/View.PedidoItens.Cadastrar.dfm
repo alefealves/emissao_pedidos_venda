@@ -4,8 +4,6 @@ inherited ViewPedidoItemCadastrar: TViewPedidoItemCadastrar
   ClientWidth = 755
   Font.Height = -24
   OnShow = FormShow
-  ExplicitLeft = 5
-  ExplicitTop = 5
   ExplicitWidth = 767
   ExplicitHeight = 474
   TextHeight = 32
@@ -16,14 +14,14 @@ inherited ViewPedidoItemCadastrar: TViewPedidoItemCadastrar
     Margins.Top = 6
     Margins.Right = 6
     Margins.Bottom = 6
-    ExplicitWidth = 1524
-    ExplicitHeight = 524
+    ExplicitWidth = 735
+    ExplicitHeight = 304
     object Label1: TLabel
       Left = 24
       Top = 25
-      Width = 77
+      Width = 48
       Height = 32
-      Caption = 'C'#243'digo'
+      Caption = 'Item'
     end
     object Label2: TLabel
       Left = 131
@@ -54,20 +52,20 @@ inherited ViewPedidoItemCadastrar: TViewPedidoItemCadastrar
       Caption = 'Val. Unit'#225'rio'
     end
     object Label6: TLabel
-      Left = 174
+      Left = 179
       Top = 226
       Width = 125
       Height = 32
       Caption = 'Quantidade'
     end
     object Label7: TLabel
-      Left = 325
+      Left = 310
       Top = 226
       Width = 94
       Height = 32
       Caption = 'Val. Total'
     end
-    object edtID: TNumberBox
+    object edtNum_Item: TNumberBox
       Left = 24
       Top = 63
       Width = 90
@@ -111,14 +109,15 @@ inherited ViewPedidoItemCadastrar: TViewPedidoItemCadastrar
     object edtValor_Unitario: TNumberBox
       Left = 28
       Top = 264
-      Width = 120
+      Width = 150
       Height = 40
-      DisplayFormat = ',,0.00'
+      DisplayFormat = 'R$ ,,0.00'
+      Mode = nbmCurrency
       TabOrder = 1
       OnExit = edtValor_UnitarioExit
     end
     object edtQuantidade: TNumberBox
-      Left = 179
+      Left = 184
       Top = 264
       Width = 120
       Height = 40
@@ -126,13 +125,14 @@ inherited ViewPedidoItemCadastrar: TViewPedidoItemCadastrar
       OnExit = edtQuantidadeExit
     end
     object edtValor_Total: TNumberBox
-      Left = 325
+      Left = 310
       Top = 264
-      Width = 120
+      Width = 150
       Height = 40
       TabStop = False
       Color = clBtnFace
-      DisplayFormat = ',,0.00'
+      DisplayFormat = 'R$ ,,0.00'
+      Mode = nbmCurrency
       ReadOnly = True
       TabOrder = 6
     end
@@ -145,8 +145,8 @@ inherited ViewPedidoItemCadastrar: TViewPedidoItemCadastrar
     Margins.Top = 6
     Margins.Right = 6
     Margins.Bottom = 6
-    ExplicitTop = 524
-    ExplicitWidth = 1524
+    ExplicitTop = 304
+    ExplicitWidth = 735
     ExplicitHeight = 82
     inherited btnCancelar: TBitBtn
       Left = 494
@@ -156,10 +156,9 @@ inherited ViewPedidoItemCadastrar: TViewPedidoItemCadastrar
       Margins.Top = 6
       Margins.Right = 6
       Margins.Bottom = 6
-      ExplicitLeft = 1262
-      ExplicitTop = 2
+      ExplicitLeft = 474
       ExplicitWidth = 260
-      ExplicitHeight = 78
+      ExplicitHeight = 80
     end
     inherited btnGravar: TBitBtn
       Left = 234
@@ -169,10 +168,9 @@ inherited ViewPedidoItemCadastrar: TViewPedidoItemCadastrar
       Margins.Top = 6
       Margins.Right = 6
       Margins.Bottom = 6
-      ExplicitLeft = 1002
-      ExplicitTop = 2
+      ExplicitLeft = 214
       ExplicitWidth = 260
-      ExplicitHeight = 78
+      ExplicitHeight = 80
     end
   end
 end

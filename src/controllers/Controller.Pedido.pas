@@ -20,6 +20,8 @@ type
     function Salvar(Pedido: TPedido; var sErro: string): Boolean;
     function Excluir(AIdPedido: integer; out sErro: string): Boolean;
     function SomaTotalPedido(AIdPedido: Integer; out sErro: string): Currency;
+    function GetNextItemPedido(AIdPedido: Integer; out sErro: string): Integer;
+    function AlterarStatus(AIdPedido: Integer; novoStatus: string; out sErro: string): Boolean;
   end;
 
 implementation
@@ -52,6 +54,16 @@ end;
 function TControllerPedido.SomaTotalPedido(AIdPedido: Integer; out sErro: string): Currency;
 begin
   result := DAOPedido.SomaTotalPedido(AIdPedido, sErro);
+end;
+
+function TControllerPedido.GetNextItemPedido(AIdPedido: Integer; out sErro: string): Integer;
+begin
+  result := DAOPedido.GetNextItemPedido(AIdPedido, sErro);
+end;
+
+function TControllerPedido.AlterarStatus(AIdPedido: Integer; novoStatus: string; out sErro: string): Boolean;
+begin
+  result := DAOPedido.AlterarStatus(AIdPedido, novoStatus, sErro);
 end;
 
 constructor TControllerPedido.Create;

@@ -13,9 +13,9 @@ type
     QListarClientesID: TIntegerField;
     QListarClientesNOME_FANTASIA: TIBStringField;
     QListarClientesRAZAO_SOCIAL: TIBStringField;
-    QListarClientesCNPJ: TIBStringField;
     QListarClientesENDERECO: TIBStringField;
-    QListarClientesTELEFONE: TIntegerField;
+    QListarClientesTELEFONE: TIBStringField;
+    QListarClientesCNPJ: TIBStringField;
   private
   protected
     procedure BuscarDados; override;
@@ -76,10 +76,10 @@ begin
     if(ViewClienteCadastrar.ShowModal = mrOk)then
     begin
       inherited UltId := ViewClienteCadastrar.UltId;
-      Self.BuscarDados;
     end;
   finally
     ViewClienteCadastrar.Free;
+    Self.BuscarDados;
   end;
 end;
 
@@ -101,6 +101,7 @@ begin
 
   finally
     FreeAndNil(ControllerCliente);
+    Self.BuscarDados;
   end;
 end;
 

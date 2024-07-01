@@ -9,7 +9,10 @@ uses
   IBX.IBQuery,
   View.Principal,
   Pedido_Item,
-  Utils;
+  Utils,
+  IBX.IBErrorCodes,
+  IBX.IBSQL,
+  IBX.IB;
 
 type
   TDAOPedido_Item = class
@@ -47,6 +50,7 @@ begin
     if not (qry.IsEmpty)then
     begin
       oPedido_Item.Id := qry.FieldByName('ID').AsInteger;
+      oPedido_Item.Num_Item := qry.FieldByName('NUM_ITEM').AsInteger;
       oPedido_Item.Id_Pedido := qry.FieldByName('ID_PEDIDO').AsInteger;
       oPedido_Item.Id_Produto := qry.FieldByName('ID_PRODUTO').AsInteger;
       oPedido_Item.Quantidade := qry.FieldByName('QUANTIDADE').AsCurrency;
@@ -65,25 +69,35 @@ var
 begin
 
   try
-    TUtils.CreateQuery(qry);
+    try
+      TUtils.CreateQuery(qry);
 
-    qry.SQL.Add('DELETE FROM PEDIDOS_ITENS ');
-    qry.SQL.Add('WHERE ID = :ID');
-    qry.SQL.Add('AND ID_PEDIDO = :ID_PEDIDO');
+      qry.SQL.Add('DELETE FROM PEDIDOS_ITENS ');
+      qry.SQL.Add('WHERE ID = :ID');
+      qry.SQL.Add('AND ID_PEDIDO = :ID_PEDIDO');
 
-    qry.ParamByName('ID').AsInteger := AIdPedido_Item;
-    qry.ParamByName('ID_PEDIDO').AsInteger := AIdPedido;
+      qry.ParamByName('ID').AsInteger := AIdPedido_Item;
+      qry.ParamByName('ID_PEDIDO').AsInteger := AIdPedido;
 
-    qry.ExecSQL();
-
-    TUtils.DestroyQuery(qry);
-    Result := True;
-  except on E: Exception do
-    begin
-      TUtils.DestroyQuery(qry);
-      Result := False;
-      sErro := 'Ocorreu um erro ao excluir o item do pedido: ' + sLineBreak + E.Message;
+      qry.ExecSQL();
+      qry.Transaction.Commit;
+      Result := True;
+    except
+      on E: EIBInterBaseError do
+      begin
+        sErro := TUtils.TratarExcecaoBD(E);
+        qry.Transaction.Rollback;
+        Result := False;
+      end;
+      on E: Exception do
+      begin
+        sErro := 'Ocorreu um erro ao salvar o item do pedido: ' + sLineBreak + E.Message;
+        qry.Transaction.Rollback;
+        Result := False;
+      end;
     end;
+  finally
+    TUtils.DestroyQuery(qry);
   end;
 end;
 
@@ -93,56 +107,72 @@ var
 begin
 
   try
-    TUtils.CreateQuery(qry);
+    try
+      TUtils.CreateQuery(qry);
 
-    if (oPedido_Item.Id = 0) then
-    begin
-      qry.SQL.Add('INSERT INTO PEDIDOS_ITENS ');
-      qry.SQL.Add('(ID_PEDIDO ');
-      qry.SQL.Add(',ID_PRODUTO ');
-      qry.SQL.Add(',QUANTIDADE ');
-      qry.SQL.Add(',VALOR_UNITARIO ');
-      qry.SQL.Add(',VALOR_TOTAL) ');
-      qry.SQL.Add('VALUES(:ID_PEDIDO ');
-      qry.SQL.Add(',:ID_PRODUTO ');
-      qry.SQL.Add(',:QUANTIDADE ');
-      qry.SQL.Add(',:VALOR_UNITARIO ');
-      qry.SQL.Add(',:VALOR_TOTAL)');
+      if (oPedido_Item.Id = 0) then
+      begin
+        qry.SQL.Add('INSERT INTO PEDIDOS_ITENS ');
+        qry.SQL.Add('(NUM_ITEM ');
+        qry.SQL.Add(',ID_PEDIDO ');
+        qry.SQL.Add(',ID_PRODUTO ');
+        qry.SQL.Add(',QUANTIDADE ');
+        qry.SQL.Add(',VALOR_UNITARIO ');
+        qry.SQL.Add(',VALOR_TOTAL) ');
+        qry.SQL.Add('VALUES(:NUM_ITEM ');
+        qry.SQL.Add(',:ID_PEDIDO ');
+        qry.SQL.Add(',:ID_PRODUTO ');
+        qry.SQL.Add(',:QUANTIDADE ');
+        qry.SQL.Add(',:VALOR_UNITARIO ');
+        qry.SQL.Add(',:VALOR_TOTAL)');
 
-      qry.ParamByName('ID_PEDIDO').AsInteger := oPedido_Item.Id_Pedido;
-      qry.ParamByName('ID_PRODUTO').AsInteger := oPedido_Item.Id_Produto;
-      qry.ParamByName('QUANTIDADE').AsCurrency := oPedido_Item.Quantidade;
-      qry.ParamByName('VALOR_UNITARIO').AsCurrency := oPedido_Item.Valor_Unitario;
-      qry.ParamByName('VALOR_TOTAL').AsCurrency := oPedido_Item.Valor_Total;
-    end
-    else
-    begin
-      qry.SQL.Add('UPDATE PEDIDOS_ITENS ');
-      qry.SQL.Add('SET ID_PEDIDO = :ID_PEDIDO ');
-      qry.SQL.Add(',ID_PRODUTO = :ID_PRODUTO ');
-      qry.SQL.Add(',QUANTIDADE = :QUANTIDADE ');
-      qry.SQL.Add(',VALOR_UNITARIO = :VALOR_UNITARIO ');
-      qry.SQL.Add(',VALOR_TOTAL = :VALOR_TOTAL ');
-      qry.SQL.Add('WHERE ID = :ID');
+        qry.ParamByName('NUM_ITEM').AsInteger := oPedido_Item.Num_Item;
+        qry.ParamByName('ID_PEDIDO').AsInteger := oPedido_Item.Id_Pedido;
+        qry.ParamByName('ID_PRODUTO').AsInteger := oPedido_Item.Id_Produto;
+        qry.ParamByName('QUANTIDADE').AsCurrency := oPedido_Item.Quantidade;
+        qry.ParamByName('VALOR_UNITARIO').AsCurrency := oPedido_Item.Valor_Unitario;
+        qry.ParamByName('VALOR_TOTAL').AsCurrency := oPedido_Item.Valor_Total;
+      end
+      else
+      begin
+        qry.SQL.Add('UPDATE PEDIDOS_ITENS ');
+        qry.SQL.Add('SET NUM_ITEM = :NUM_ITEM ');
+        qry.SQL.Add(',ID_PEDIDO = :ID_PEDIDO ');
+        qry.SQL.Add(',ID_PRODUTO = :ID_PRODUTO ');
+        qry.SQL.Add(',QUANTIDADE = :QUANTIDADE ');
+        qry.SQL.Add(',VALOR_UNITARIO = :VALOR_UNITARIO ');
+        qry.SQL.Add(',VALOR_TOTAL = :VALOR_TOTAL ');
+        qry.SQL.Add('WHERE ID = :ID');
 
-      qry.ParamByName('ID_PEDIDO').AsInteger := oPedido_Item.Id_Pedido;
-      qry.ParamByName('ID_PRODUTO').AsInteger := oPedido_Item.Id_Produto;
-      qry.ParamByName('QUANTIDADE').AsCurrency := oPedido_Item.Quantidade;
-      qry.ParamByName('VALOR_UNITARIO').AsCurrency := oPedido_Item.Valor_Unitario;
-      qry.ParamByName('VALOR_TOTAL').AsCurrency := oPedido_Item.Valor_Total;
+        qry.ParamByName('NUM_ITEM').AsInteger := oPedido_Item.Num_Item;
+        qry.ParamByName('ID_PEDIDO').AsInteger := oPedido_Item.Id_Pedido;
+        qry.ParamByName('ID_PRODUTO').AsInteger := oPedido_Item.Id_Produto;
+        qry.ParamByName('QUANTIDADE').AsCurrency := oPedido_Item.Quantidade;
+        qry.ParamByName('VALOR_UNITARIO').AsCurrency := oPedido_Item.Valor_Unitario;
+        qry.ParamByName('VALOR_TOTAL').AsCurrency := oPedido_Item.Valor_Total;
 
-      qry.ParamByName('ID').AsInteger := oPedido_Item.Id;
+        qry.ParamByName('ID').AsInteger := oPedido_Item.Id;
+      end;
+
+      qry.ExecSQL();
+      qry.Transaction.Commit;
+      Result := True;
+    except
+      on E: EIBInterBaseError do
+        begin
+          sErro := TUtils.TratarExcecaoBD(E);
+          qry.Transaction.Rollback;
+          Result := False;
+        end;
+        on E: Exception do
+        begin
+          sErro := 'Ocorreu um erro ao salvar o item do pedido: ' + sLineBreak + E.Message;
+          qry.Transaction.Rollback;
+          Result := False;
+        end;
     end;
-
-    qry.ExecSQL();
-    Result := True;
+  finally
     TUtils.DestroyQuery(qry);
-  except on E: Exception do
-    begin
-      TUtils.DestroyQuery(qry);
-      Result := False;
-      sErro := 'Ocorreu um erro ao salvar o item do pedido: ' + sLineBreak + E.Message;
-    end;
   end;
 end;
 
@@ -156,6 +186,7 @@ begin
     TUtils.CreateQuery(qry);
     qry.SQL.Add('SELECT ');
     qry.SQL.Add('PI.ID, ');
+    qry.SQL.Add('PI.NUM_ITEM, ');
     qry.SQL.Add('PI.ID_PEDIDO, ');
     qry.SQL.Add('PI.ID_PRODUTO, ');
     qry.SQL.Add('PROD.DESCRICAO, ');

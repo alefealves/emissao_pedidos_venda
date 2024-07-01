@@ -33,7 +33,7 @@ uses
   dxPSPrVwStd, dxPSPrVwAdv, dxPSPrVwRibbon, dxPScxPageControlProducer,
   dxPScxEditorProducers, dxPScxExtEditorProducers, dxPSCore, dxPScxGridLnk,
   dxPScxGridLayoutViewLnk, dxPScxCommon, dxSpreadSheetCore,
-  dxSpreadSheetReportDesigner;
+  dxSpreadSheetReportDesigner, frxSmartMemo, frxClass, frCoreClasses, frxDBSet;
 
 type
   TViewRelatorioVendas = class(TForm)
@@ -61,16 +61,14 @@ type
     cxGridRelatorioDBTableView1QUANTIDADE: TcxGridDBColumn;
     cxGridRelatorioDBTableView1TOTAL_VENDIDO: TcxGridDBColumn;
     btnExportar: TcxButton;
-    dxComponentPrinter1: TdxComponentPrinter;
-    dxComponentPrinter1Link1: TdxGridReportLink;
-    btnExportarXLSX: TcxButton;
+    frx_produtos: TfrxDBDataset;
+    frx_relatorio: TfrxReport;
     procedure btnPesquisarClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure btnExportarClick(Sender: TObject);
-    procedure btnExportarXLSXClick(Sender: TObject);
   private
-    procedure ExportarParaPDF;
-    procedure ExportarParaXLSX;
+    //procedure ExportarParaPDF;
+    //procedure ExportarParaXLSX;
     { Private declarations }
 
   public
@@ -113,60 +111,64 @@ end;
 
 procedure TViewRelatorioVendas.btnExportarClick(Sender: TObject);
 begin
-  if(DsRelatorio.DataSet.IsEmpty)then begin
-    Application.MessageBox('Nenhum registro para exportar.', 'Atenção', MB_OK +
-        MB_ICONWARNING);
-        Exit;
-  end;
-        
-  Self.ExportarParaPDF;
-end;
-
-procedure TViewRelatorioVendas.ExportarParaPDF;
-var
-  fileName : string;
-begin
   try
-    dxComponentPrinter1.ExportToPDF();
-    Application.MessageBox('Relatório exportado com sucesso.', 'Atenção', MB_OK +
-        MB_ICONWARNING);
+
+     if frx_relatorio.PrepareReport then
+      frx_relatorio.ShowReport;
+
   except on E: Exception do
     begin
       Exception.Create(e.Message);
     end;
   end;
+
 end;
 
-procedure TViewRelatorioVendas.btnExportarXLSXClick(Sender: TObject);
-begin
-  if(DsRelatorio.DataSet.IsEmpty)then begin
-    Application.MessageBox('Nenhum registro para exportar.', 'Atenção', MB_OK +
-        MB_ICONWARNING);
-        Exit;
-  end;
-  
-  Self.ExportarParaXLSX;
-end;
-
-procedure TViewRelatorioVendas.ExportarParaXLSX;
-var
-  fileName : string;
-begin
-  //fileName := TUtils.GetDesktopPath;
-  try
-    fileName := fileName+'Relatório_Vendas_'+StringReplace(DateToStr(cxDatIni.Date), '/', '_', [rfReplaceAll])
-                +'_a_'+StringReplace(DateToStr(cxDatFim.Date), '/', '_', [rfReplaceAll]);
-    //ExportGridToXLSX(fileName, cxGridRelatorio, True, True, True, 'xlsx');
-    ExportGridToXLSX(fileName, cxGridRelatorio, True, True, True, 'xlsx');
-    ShellExecute(Handle, 'open', pchar(fileName), nil, nil, SW_SHOW);
-    Application.MessageBox('Relatório exportado com sucesso.', 'Atenção', MB_OK +
-        MB_ICONWARNING);
-  except on E: Exception do
-    begin
-      Exception.Create(e.Message);
-    end;
-  end;
-end;
+//procedure TViewRelatorioVendas.ExportarParaPDF;
+//var
+//  fileName : string;
+//begin
+//  try
+//    dxComponentPrinter1.ExportToPDF();
+//    Application.MessageBox('Relatório exportado com sucesso.', 'Atenção', MB_OK +
+//        MB_ICONWARNING);
+//  except on E: Exception do
+//    begin
+//      Exception.Create(e.Message);
+//    end;
+//  end;
+//end;
+//
+//procedure TViewRelatorioVendas.btnExportarXLSXClick(Sender: TObject);
+//begin
+//  if(DsRelatorio.DataSet.IsEmpty)then begin
+//    Application.MessageBox('Nenhum registro para exportar.', 'Atenção', MB_OK +
+//        MB_ICONWARNING);
+//        Exit;
+//  end;
+//
+//  Self.ExportarParaXLSX;
+//end;
+//
+//procedure TViewRelatorioVendas.ExportarParaXLSX;
+//var
+//  fileName : string;
+//begin
+//  //fileName := TUtils.GetDesktopPath;
+//  try
+//    fileName := fileName+'Relatório_Vendas_'+StringReplace(DateToStr(cxDatIni.Date), '/', '_', [rfReplaceAll])
+//                +'_a_'+StringReplace(DateToStr(cxDatFim.Date), '/', '_', [rfReplaceAll]);
+//    //ExportGridToXLSX(fileName, cxGridRelatorio, True, True, True, 'xlsx');
+//    ExportGridToXLSX(fileName, cxGridRelatorio, True, True, True, 'xlsx');
+//    ShellExecute(Handle, 'open', pchar(fileName), nil, nil, SW_SHOW);
+//    Application.MessageBox('Relatório exportado com sucesso.', 'Atenção', MB_OK +
+//        MB_ICONWARNING);
+//  except on E: Exception do
+//    begin
+//      Exception.Create(e.Message);
+//    end;
+//  end;
+//end;
 
 
 end.

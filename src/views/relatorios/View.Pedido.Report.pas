@@ -21,7 +21,8 @@ uses
   dxSkinSummer2008, dxSkinTheAsphaltWorld, dxSkinTheBezier, dxSkinValentine,
   dxSkinVisualStudio2013Blue, dxSkinVisualStudio2013Dark,
   dxSkinVisualStudio2013Light, dxSkinVS2010, dxSkinWhiteprint, dxSkinWXI,
-  dxSkinXmas2008Blue, dxSpreadSheetCore, dxSpreadSheetReportDesigner;
+  dxSkinXmas2008Blue, dxSpreadSheetCore, dxSpreadSheetReportDesigner,
+  frxSmartMemo, frCoreClasses, frxClass, frxPDFViewer, frxDBSet;
 
 type
   TViewPedidoReport = class(TForm)

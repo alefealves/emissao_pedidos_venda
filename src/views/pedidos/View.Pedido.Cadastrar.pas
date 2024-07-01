@@ -5,7 +5,8 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, IBX.IBCustomDataSet, IBX.IBQuery,
   View.Heranca.Cadastrar, Data.DB, Vcl.StdCtrls, Vcl.NumberBox, Vcl.Controls, Vcl.Buttons, Vcl.ExtCtrls, Vcl.Grids,
-  Vcl.DBGrids, Vcl.Menus, Vcl.Forms, Vcl.Dialogs, VCL.Graphics;
+  Vcl.DBGrids, Vcl.Menus, Vcl.Forms, Vcl.Dialogs, VCL.Graphics, frxSmartMemo,
+  frxPDFViewer, frxClass, frCoreClasses, frxDBSet;
 
 
 type
@@ -49,6 +50,15 @@ type
     edtStatus: TEdit;
     btnAlterarStatus: TBitBtn;
     btnImprimir: TBitBtn;
+    frx_pedido: TfrxDBDataset;
+    frx_relatorio: TfrxReport;
+    frx_pedido_itens: TfrxDBDataset;
+    dsPedido: TDataSource;
+    QPedido: TIBQuery;
+    QPedidoID: TIntegerField;
+    QPedidoNOME_FANTASIA: TIBStringField;
+    QPedidoVALOR_TOTAL: TIBBCDField;
+    QPedidoDATA: TDateTimeField;
     procedure FormShow(Sender: TObject);
     procedure edtId_ClienteKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure edtId_ClienteExit(Sender: TObject);
@@ -140,6 +150,7 @@ begin
     //carrega itens
     Self.AtualizarItens;
     pnItens.Enabled := True;
+    btnImprimir.Visible := True;
     Self.VerificaStatus;
   finally
     FreeAndNil(Pedido);
@@ -624,7 +635,20 @@ end;
 
 procedure TViewPedidoCadastrar.btnImprimirClick(Sender: TObject);
 begin
-  //
+  if(dsItens.DataSet.IsEmpty)then begin
+    Application.MessageBox('Pedido sem itens', 'Atenção', MB_OK +
+        MB_ICONWARNING);
+        Exit;
+  end;
+
+  dsPedido.DataSet.Close;
+    QPedido.ParamByName('ID_PEDIDO').AsInteger := edtID.ValueInt;
+  dsPedido.DataSet.Open;
+
+  if frx_relatorio.PrepareReport then
+    frx_relatorio.ShowReport;
+
+  dsPedido.DataSet.Close;
 end;
 
 

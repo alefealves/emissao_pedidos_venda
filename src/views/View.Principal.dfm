@@ -2,7 +2,7 @@ object ViewPrincipal: TViewPrincipal
   Left = 0
   Top = 0
   Caption = 'Sistema Vendas'
-  ClientHeight = 1238
+  ClientHeight = 1228
   ClientWidth = 1658
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -16,7 +16,7 @@ object ViewPrincipal: TViewPrincipal
   TextHeight = 37
   object PanelStatus: TPanel
     Left = 0
-    Top = 1213
+    Top = 1203
     Width = 1658
     Height = 25
     Align = alBottom
@@ -48,7 +48,7 @@ object ViewPrincipal: TViewPrincipal
     Left = 0
     Top = 0
     Width = 1658
-    Height = 1213
+    Height = 1203
     Align = alClient
     AutoSize = True
     TabOrder = 1

@@ -1,4 +1,4 @@
-# Aplicação: Controle de Abastecimentos (PostoABC)
+# Aplicação: Sistema Emissor de Pedidos de Venda
 
 Sistema de emissão de pedidos de venda, neste projeto foi utilizado os conceitos Orientacao a Objetos, MVC e Multicamadas.
 

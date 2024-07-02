@@ -4,6 +4,14 @@ Sistema de emissão de pedidos de venda, neste projeto foi utilizado os conceito
 
 # Requisitos funcionais:
 
+  1 - O sistema deverá permitir o cadastro dos clientes, salvando o nome fantasia, razão social, CNPJ, endereço e telefone.
+  2 - Também é necessário o cadastro dos produtos que serão vendidos contendo descrição do produto, marca e preço.
+  2 - Na digitação do pedido o usuário deverá selecionar o cliente e poderá incluir vários itens para um pedido. Na inserção do item,
+  deverá puxar o valor cadastrado, porém, permitir alterar o valor e informar a quantidade.
+  3 - Ao final da digitação o usuário poderá imprimir o pedido de venda, sendo apresentados os dados do cliente, dados para identificação do pedido, 
+  detalhamento dos itens e valores totais.
+  4 - Criar um relatório que mostra os dois produtos mais vendidos em um determinado período, pode ser mostrado em grid e/ou fast report.
+  O relatório deve ser em uma procedure.
 
 ## Ambiente de Desenvolvimento
 
